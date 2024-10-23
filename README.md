@@ -54,42 +54,21 @@ EMedicine Pakistan is licensed under the MIT License.
 
 Authors
 
-- (link unavailable)
-- (link unavailable)
-- (link unavailable)
-
-Acknowledgments
-
-Special thanks to [Organization/Individual] for their support and guidance.
-
-Screenshots
+- Faiz Ullah Khan
 
 Patient Dashboard
 
-[Image description: Patient dashboard screenshot]
+<img src="#"/>
 
 Pharmacy Dashboard
 
-[Image description: Pharmacy dashboard screenshot]
+<img src="#"/>
 
 Consultation Interface
 
-[Image description: Consultation interface screenshot]
-
-Roadmap
-
-- Integrate telemedicine features
-- Expand to include lab testing and diagnostic services
-- Partner with insurance providers for reimbursement options
+<img src="#"/>
 
 Get in Touch
 
-- Email: mailto:info@emedicinepakistan.com
-- Phone: +92 321 1234567
-- Website: (link unavailable)
-
-Social Media
-
-- Twitter: (link unavailable)
-- Facebook: https://facebook.com/emedicinepakistan
-- LinkedIn: (link unavailable)
+- Email: mailto:faizullahofficial0@gmail.com
+- Phone: +92 332 8753452
