@@ -2,7 +2,7 @@ import { Router } from "express";
 import { authorizeRole, isAuthenticated } from "../middlewares/auth";
 import {
     deleteOrder,
-    getAllOrder,
+    getAllOrders,
     getById,
     placeOrder,
     test,
@@ -34,7 +34,7 @@ router.get("/get/:orderId", isAuthenticated, getById);
  * Route to get all orders.
  * Accessible to any authenticated user.
  */
-router.get("/all", isAuthenticated, getAllOrder);
+router.get("/all", isAuthenticated, getAllOrders);
 
 /**
  * Route to delete an order by its ID.

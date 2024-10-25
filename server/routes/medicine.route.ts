@@ -5,7 +5,7 @@ import {
     deleteMedicine,
     getAllMedicines,
     getById,
-    listPopularMedince,
+    listPopularMedicine,
     updateMedicine,
 } from "../controllers/medicine.controller";
 
@@ -43,7 +43,7 @@ router.get("/get/:medicineId", isAuthenticated, getById);
  * Route to list popular medicines.
  * Accessible to authenticated users.
  */
-router.get("/popular", isAuthenticated, listPopularMedince);
+router.get("/popular", isAuthenticated, listPopularMedicine);
 
 /**
  * Route to get all medicines.

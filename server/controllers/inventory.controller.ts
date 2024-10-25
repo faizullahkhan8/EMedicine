@@ -87,10 +87,12 @@ export const updateInventory = CatchAsyncError(
 export const lowQuantityProductsAlert = CatchAsyncError(
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const query = req.body || {};
+            const number = req.body;
 
             // Find inventories based on the provided query
-            const inventories = await InventoryModel.find(query);
+            const inventories = await InventoryModel.find({
+                quantity: { $lt: number },
+            });
 
             if (!inventories.length) {
                 // Return error if no matching products found
