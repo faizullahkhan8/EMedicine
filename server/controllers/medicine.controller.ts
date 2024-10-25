@@ -3,229 +3,199 @@ import { CatchAsyncError } from "../middlewares/catchAsyncError";
 import ErrorHandler from "../utils/ErrorHandler";
 import MedicineModel, { IMedicineOptions } from "../models/medicine.model";
 import ReviewModel from "../models/review.model";
-import { ObjectId } from "mongoose";
 import ReviewReplyModel from "../models/reviewReply.model";
 import InventoryModel from "../models/inventory.model";
 
+// Create a new medicine entry in the database
 export const createMedicine = CatchAsyncError(
     async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const medicineData = req.body as any;
+        const { name, category, type, quantity, ...otherData } = req.body;
 
-            const { name, category, type, quantity } = medicineData;
+        // Check if the medicine already exists
+        const existingMedicine = await MedicineModel.findOne({
+            name: { $regex: "^" + name, $options: "i" },
+            category,
+            type,
+        });
 
-            const isAlreadyExists = await MedicineModel.findOne({
-                name: {
-                    $regex: "^" + name,
-                    $options: "i",
-                },
-                category,
-                type,
-            });
-
-            if (isAlreadyExists) {
-                throw new Error(
-                    `Medicine already exists with the fields, name: ${isAlreadyExists.name} , category: ${isAlreadyExists.category} , type: ${isAlreadyExists.type}`
-                );
-            }
-
-            const dbMedicine = new MedicineModel({
-                ...medicineData,
-                userId: req.user._id,
-            });
-
-            await dbMedicine.save({ validateModifiedOnly: true });
-
-            await InventoryModel.create({
-                medicineId: dbMedicine._id,
-                quantity: quantity | 0,
-            });
-
-            return res.status(201).json({
-                success: true,
-                message: "Medicine create successfully",
-                medicine: dbMedicine,
-            });
-        } catch (error: any) {
-            console.log("ERROR IN CREATE MEDICINE : ", error.message);
-            return next(new ErrorHandler(error.message, 500));
+        if (existingMedicine) {
+            return next(
+                new ErrorHandler(
+                    `Medicine with name "${existingMedicine.name}", category "${existingMedicine.category}", and type "${existingMedicine.type}" already exists.`,
+                    409
+                )
+            );
         }
+
+        // Save the new medicine and initialize inventory
+        const newMedicine = new MedicineModel({
+            ...otherData,
+            name,
+            category,
+            type,
+            userId: req.user._id,
+        });
+
+        await newMedicine.save({ validateModifiedOnly: true });
+
+        await InventoryModel.create({
+            medicineId: newMedicine._id,
+            quantity: quantity || 0,
+        });
+
+        return res.status(201).json({
+            success: true,
+            message: "Medicine created successfully.",
+            medicine: newMedicine,
+        });
     }
 );
 
+// Update an existing medicine by ID
 export const updateMedicine = CatchAsyncError(
     async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const medicineData: IMedicineOptions = req.body as any;
-            const { medicineId } = req.params;
+        const { medicineId } = req.params;
+        const updateData: IMedicineOptions = req.body;
 
-            if (!medicineId) {
-                throw new Error("Missing medicine id!");
-            }
-
-            const dbMedicine = await MedicineModel.findOneAndUpdate(
-                {
-                    $and: [
-                        { _id: { $eq: medicineId } },
-                        { userId: { $eq: req.user._id } },
-                    ],
-                },
-                { $set: medicineData },
-                { new: true }
-            );
-
-            if (!dbMedicine) {
-                throw new Error(
-                    "Somethings went wronge during medicine updation!"
-                );
-            }
-
-            return res.status(201).json({
-                success: true,
-                message: "Medicine updated successfully!",
-            });
-        } catch (error: any) {
-            console.log("ERROR IN UPDATE MEDICINE : ", error.messaege);
-            return next(new ErrorHandler(error.message, 500));
+        if (!medicineId) {
+            return next(new ErrorHandler("Medicine ID is required.", 400));
         }
+
+        // Find and update the medicine
+        const updatedMedicine = await MedicineModel.findOneAndUpdate(
+            { _id: medicineId, userId: req.user._id },
+            { $set: updateData },
+            { new: true }
+        );
+
+        if (!updatedMedicine) {
+            return next(new ErrorHandler("Medicine update failed.", 404));
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Medicine updated successfully.",
+            medicine: updatedMedicine,
+        });
     }
 );
 
+// Retrieve a medicine by its ID
 export const getById = CatchAsyncError(
     async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const { medicineId } = req.params;
+        const { medicineId } = req.params;
 
-            if (!medicineId) {
-                throw new Error("Medicine id missing");
-            }
-
-            const dbMedicine = await MedicineModel.findById(medicineId);
-
-            if (!dbMedicine) {
-                throw new Error("Medinice not found!");
-            }
-
-            return res.status(200).json({
-                success: true,
-                message: "Medicine founded successfully",
-                medicine: dbMedicine,
-            });
-        } catch (error: any) {
-            console.log("ERROR IN GET BY ID", error.message);
-            return next(new ErrorHandler(error.message, 500));
+        if (!medicineId) {
+            return next(new ErrorHandler("Medicine ID is required.", 400));
         }
+
+        // Find the medicine by ID
+        const medicine = await MedicineModel.findById(medicineId);
+
+        if (!medicine) {
+            return next(new ErrorHandler("Medicine not found.", 404));
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Medicine retrieved successfully.",
+            medicine,
+        });
     }
 );
 
+// Retrieve all medicines, with optional filters
 export const getAllMedicines = CatchAsyncError(
     async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const query = req.body || {};
+        const query = req.body || {};
+        const filter = query
+            ? {
+                  [Object.keys(query)[0]]: {
+                      $regex: "^" + Object.values(query)[0],
+                      $options: "i",
+                  },
+              }
+            : {};
 
-            const queryKey = Object.keys(query)[0];
-            const queryValue = Object.values(query)[0];
+        // Get all medicines with optional filtering
+        const medicines = await MedicineModel.find(filter);
 
-            const allMedicines = await MedicineModel.find(
-                Object.keys(query).length > 0
-                    ? {
-                          [queryKey]: {
-                              $regex: "^" + queryValue,
-                              $options: "i",
-                          },
-                      }
-                    : {}
+        if (medicines.length === 0) {
+            return next(
+                new ErrorHandler("No medicines found in the database.", 404)
             );
-
-            if (allMedicines.length < 0) {
-                throw new Error("No medicine yet in db!");
-            }
-
-            return res.status(200).json({
-                success: true,
-                medicineLen: allMedicines.length,
-                medicines: allMedicines,
-            });
-        } catch (error: any) {
-            console.log("ERROR IN GET ALL MEDICINES :", error);
-            return next(new ErrorHandler(error.message, 500));
         }
+
+        return res.status(200).json({
+            success: true,
+            total: medicines.length,
+            medicines,
+        });
     }
 );
 
+// Delete a medicine by ID, mark as deleted, and remove associated reviews
 export const deleteMedicine = CatchAsyncError(
     async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const { medicineId } = req.params;
-            const userId = req.user._id;
+        const { medicineId } = req.params;
+        const userId = req.user._id as any;
 
-            if (
-                !medicineId ||
-                medicineId === null ||
-                medicineId === undefined
-            ) {
-                throw new Error("Medicine id is missing!");
-            }
-
-            const deletedMedicine = await MedicineModel.findById(medicineId);
-
-            if (!deletedMedicine) {
-                throw new Error("Medicine not found!");
-            }
-
-            if (deletedMedicine.isDeleted) {
-                throw new Error("Medicine already deleted!");
-            }
-
-            deletedMedicine?.reviews?.map(async (reviewId: any) => {
-                const deletedReveiw = await ReviewModel.findByIdAndDelete(
-                    reviewId
-                );
-                deletedReveiw?.reply.map(async (replyId) => {
-                    await ReviewReplyModel.deleteOne(replyId);
-                });
-            });
-
-            deletedMedicine.reviews = [];
-
-            deletedMedicine.deletedBy = userId as any;
-
-            deletedMedicine.isDeleted = true;
-
-            await deletedMedicine.save({ validateModifiedOnly: true });
-
-            res.status(200).json({
-                success: true,
-                message: "Medicine deleted successfully!",
-            });
-        } catch (error: any) {
-            console.log("ERROR IN DELETE MEDICINE : ", error.message);
-            return next(new ErrorHandler(error.message, 500));
+        if (!medicineId) {
+            return next(new ErrorHandler("Medicine ID is required.", 400));
         }
+
+        // Find the medicine to delete
+        const medicine = await MedicineModel.findById(medicineId);
+
+        if (!medicine) {
+            return next(new ErrorHandler("Medicine not found.", 404));
+        }
+
+        if (medicine.isDeleted) {
+            return next(
+                new ErrorHandler("Medicine is already marked as deleted.", 400)
+            );
+        }
+
+        // Delete associated reviews and replies
+        if (medicine.reviews) {
+            for (const reviewId of medicine.reviews) {
+                const review = await ReviewModel.findByIdAndDelete(reviewId);
+                if (review?.reply) {
+                    await ReviewReplyModel.deleteMany({
+                        _id: { $in: review.reply },
+                    });
+                }
+            }
+        }
+
+        // Mark medicine as deleted
+        medicine.isDeleted = true;
+        medicine.deletedBy = userId;
+        medicine.reviews = [];
+        await medicine.save({ validateModifiedOnly: true });
+
+        return res.status(200).json({
+            success: true,
+            message: "Medicine deleted successfully.",
+        });
     }
 );
 
-export const listPopularMedince = CatchAsyncError(
+// List popular medicines based on rating
+export const listPopularMedicine = CatchAsyncError(
     async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const query = req.body || {};
+        const query = req.body || {};
 
-            const poplarMedicines = await MedicineModel.find(query)
-                .populate({
-                    path: "reviews",
-                    model: "Reviews",
-                    select: "rating",
-                })
-                .sort({ rating: -1 })
-                .limit(15);
+        // Fetch popular medicines, sorted by rating
+        const popularMedicines = await MedicineModel.find(query)
+            .populate("reviews", "rating")
+            .sort({ rating: -1 })
+            .limit(15);
 
-            return res.status(200).json({
-                success: true,
-                poplarMedicines,
-            });
-        } catch (error: any) {
-            console.log("ERROR IN LIST POPULAR MEDICINE :", error.message);
-            return next(new ErrorHandler(error.message, 500));
-        }
+        return res.status(200).json({
+            success: true,
+            popularMedicines,
+        });
     }
 );

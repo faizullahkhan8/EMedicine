@@ -2,38 +2,31 @@ import { Response } from "express";
 import jwt, { Secret } from "jsonwebtoken";
 import { IUser } from "../models/user.model";
 import TokenModel from "../models/token.model";
-import tokenModel from "../models/token.model";
 
 /**
  * Generate a JWT token.
  *
- * @description Signs a JWT Token with the provided payload,secret,and expiration time,
- * sets it as a cookie with specified name and options.
+ * @description Signs a JWT Token with the provided payload, secret, and expiration time.
  *
- * @param {object} payload - Token payload containing user data.
+ * @param {object} payload - The token payload containing user data.
  * @param {string} jwtSecret - Secret key for signing the token.
- * @param {string|number} expiresIn - Token expiration time (e.g.,'1h',"1m","1d","7 days")
+ * @param {string|number} expiresIn - Token expiration time (e.g., '1h', '1d', '7d').
+ * @returns {string} A signed JWT token.
  *
  * @example
- * const payload = {username:"joheDeo"};
+ * const payload = { username: "johnDoe" };
  * const secret = "mySecretKey";
- * const expiresIn = "1h"
- * const token = signJwtToken(payload,secret,expiresIn);
+ * const expiresIn = "1h";
+ * const token = signJwtToken(payload, secret, expiresIn);
  *
- * @returns {string} token if success
- *
- * @author Faiz Ullah Khan
+ * @author Faiz
  */
 export const signJwtToken = (
-    paylaod: object,
+    payload: object,
     jwtSecret: Secret,
-    expiresIn: string
-) => {
-    const token = jwt.sign(paylaod, jwtSecret, {
-        expiresIn,
-    });
-
-    return token;
+    expiresIn: string | number
+): string => {
+    return jwt.sign(payload, jwtSecret, { expiresIn });
 };
 
 interface ITokenOption {
@@ -44,46 +37,62 @@ interface ITokenOption {
     secure?: boolean;
 }
 
-export const sendToken = async function (user: IUser, res: Response) {
-    const accessToken = await user.SignAccessToken();
-    const refreshToken = await user.SignRefreshToken();
+/**
+ * Send JWT tokens as cookies in the response.
+ *
+ * @description Generates and sends both access and refresh tokens as cookies with specified options.
+ *
+ * @param {IUser} user - The user object.
+ * @param {Response} res - The Express response object.
+ *
+ * @example
+ * sendToken(user, res);
+ */
+export const sendToken = async (user: IUser, res: Response): Promise<void> => {
+    const accessToken = await user.SignAccessToken(); // Generate access token for the user
+    const refreshToken = await user.SignRefreshToken(); // Generate refresh token for the user
 
-    const ACCESS_TOKEN_EXPIRE: number = Number.parseInt(
-        process.env.ACCESS_TOKEN_EXPIRE || ""
+    // Fetch token expiration times from environment variables
+    const ACCESS_TOKEN_EXPIRE: number = parseInt(
+        process.env.ACCESS_TOKEN_EXPIRE || "60"
     );
-    const REFRESH_TOKEN_EXPIRE: number = Number.parseInt(
-        process.env.REFRESH_TOKEN_EXPIRE || ""
+    const REFRESH_TOKEN_EXPIRE: number = parseInt(
+        process.env.REFRESH_TOKEN_EXPIRE || "7"
     );
 
+    // Set cookie options for the access token
     const accessTokenOptions: ITokenOption = {
-        expires: new Date(Date.now() + ACCESS_TOKEN_EXPIRE * 60 * 1000),
-        maxAge: ACCESS_TOKEN_EXPIRE * 60 * 1000,
-        httpOnly: true,
-        sameSite: "lax",
-        secure: process.env.NODE_ENV !== "development",
+        expires: new Date(Date.now() + ACCESS_TOKEN_EXPIRE * 60 * 1000), // Access token expiration
+        maxAge: ACCESS_TOKEN_EXPIRE * 60 * 1000, // Max age in milliseconds
+        httpOnly: true, // Prevent client-side scripts from accessing the token
+        sameSite: "lax", // CSRF protection
+        secure: process.env.NODE_ENV !== "development", // Secure flag for HTTPS in production
     };
 
+    // Set cookie options for the refresh token
     const refreshTokenOptions: ITokenOption = {
         expires: new Date(
-            Date.now() * REFRESH_TOKEN_EXPIRE + 24 * 60 * 60 * 1000
-        ),
-        maxAge: REFRESH_TOKEN_EXPIRE * 24 * 60 * 60 * 1000,
-        httpOnly: true,
-        sameSite: "lax",
-        secure: process.env.NODE_ENV !== "development",
+            Date.now() + REFRESH_TOKEN_EXPIRE * 24 * 60 * 60 * 1000
+        ), // Refresh token expiration
+        maxAge: REFRESH_TOKEN_EXPIRE * 24 * 60 * 60 * 1000, // Max age in milliseconds
+        httpOnly: true, // Prevent client-side scripts from accessing the token
+        sameSite: "lax", // CSRF protection
+        secure: process.env.NODE_ENV !== "development", // Secure flag for HTTPS in production
     };
 
-    const isTokenExistsWithGivenId = await TokenModel.findOne({
-        userId: user._id,
-    });
+    // Check if a token for this user already exists in the database
+    const existingToken = await TokenModel.findOne({ userId: user._id });
 
-    if (!isTokenExistsWithGivenId) {
+    if (!existingToken) {
+        // If no token exists, create a new one for the user
         await TokenModel.create({ token: refreshToken, userId: user._id });
     } else {
-        isTokenExistsWithGivenId.token = refreshToken;
-        await isTokenExistsWithGivenId.save();
+        // If token exists, update it with the new refresh token
+        existingToken.token = refreshToken;
+        await existingToken.save();
     }
 
+    // Send the tokens as cookies in the response
     res.cookie("access_token", accessToken, accessTokenOptions);
     res.cookie("refresh_token", refreshToken, refreshTokenOptions);
 };

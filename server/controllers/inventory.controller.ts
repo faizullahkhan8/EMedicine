@@ -3,26 +3,32 @@ import { CatchAsyncError } from "../middlewares/catchAsyncError";
 import ErrorHandler from "../utils/ErrorHandler";
 import InventoryModel from "../models/inventory.model";
 
+// Fetch inventory details by medicine ID
 export const getByMedicineId = CatchAsyncError(
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const medicineId = req.params.medicineId;
+            const { medicineId } = req.params;
 
-            const dbMedicineInventory = await InventoryModel.findOne({
-                medicineId: { $eq: medicineId },
-            });
+            // Find inventory by medicine ID
+            const inventory = await InventoryModel.findOne({ medicineId });
 
-            if (!dbMedicineInventory) {
-                throw new Error("Inventory not found with the given id!");
+            if (!inventory) {
+                // Return error if inventory not found
+                return next(
+                    new ErrorHandler(
+                        "Inventory not found with the given ID",
+                        404
+                    )
+                );
             }
 
             return res.status(200).json({
                 success: true,
-                inventory: dbMedicineInventory,
+                inventory,
             });
         } catch (error: any) {
-            console.log(
-                "ERROR IN INVENTORY GET BY MEDICINE ID :",
+            console.error(
+                "Error fetching inventory by medicine ID:",
                 error.message
             );
             return next(new ErrorHandler(error.message, 500));
@@ -30,60 +36,81 @@ export const getByMedicineId = CatchAsyncError(
     }
 );
 
+// Update inventory quantity by medicine ID
 export const updateInventory = CatchAsyncError(
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const medicineId = req.params.medicineId;
+            const { medicineId } = req.params;
             const { quantity } = req.body as { quantity: number };
 
-            if (!quantity) {
-                throw new Error("Missing medicine quantity!");
+            // Validate quantity input
+            if (!quantity || quantity < 1) {
+                return next(
+                    new ErrorHandler(
+                        "Quantity must be provided and greater than 0",
+                        400
+                    )
+                );
             }
 
-            if (quantity < 1) {
-                throw new Error("Quantity must be greater then '0' !");
+            // Find the inventory for the specified medicine
+            const inventory = await InventoryModel.findOne({ medicineId });
+
+            if (!inventory) {
+                // Return error if inventory not found
+                return next(
+                    new ErrorHandler(
+                        "Inventory not found with the given ID",
+                        404
+                    )
+                );
             }
 
-            const dbMedicineInventory = await InventoryModel.findOne({
-                medicineId: { $eq: medicineId },
-            });
+            // Update quantity
+            inventory.quantity += quantity;
 
-            if (!dbMedicineInventory) {
-                throw new Error("Inventory not found!");
-            }
-
-            dbMedicineInventory.quantity += quantity;
-
-            await dbMedicineInventory.save({ validateModifiedOnly: true });
+            // Save the updated inventory
+            await inventory.save({ validateModifiedOnly: true });
 
             return res.status(200).json({
                 success: true,
-                medicineInventory: dbMedicineInventory,
+                inventory,
             });
         } catch (error: any) {
-            console.log("ERROR IN UPDATE INVENTORY : ", error.message);
+            console.error("Error updating inventory:", error.message);
             return next(new ErrorHandler(error.message, 500));
         }
     }
 );
 
+// Get products with low quantity based on query parameters
 export const lowQuantityProductsAlert = CatchAsyncError(
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             const query = req.body || {};
 
-            const medicineInventories = await InventoryModel.find(query);
+            // Find inventories based on the provided query
+            const inventories = await InventoryModel.find(query);
 
-            if (medicineInventories.length < 1) {
-                throw new Error("No product yet!");
+            if (!inventories.length) {
+                // Return error if no matching products found
+                return next(
+                    new ErrorHandler(
+                        "No products found matching the criteria",
+                        404
+                    )
+                );
             }
 
             return res.status(200).json({
                 success: true,
-                inentory: medicineInventories,
+                inventories,
             });
         } catch (error: any) {
-            console.log("ERROR IN LOW QUANTITY PRODUCTS ALERT", error.message);
+            console.error(
+                "Error fetching low quantity products:",
+                error.message
+            );
             return next(new ErrorHandler(error.message, 500));
         }
     }

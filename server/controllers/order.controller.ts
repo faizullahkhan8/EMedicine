@@ -6,11 +6,12 @@ import MedicineModel from "../models/medicine.model";
 import mongoose from "mongoose";
 import InventoryModel from "../models/inventory.model";
 
+// Test route to check API is working
 export const test = CatchAsyncError(
     async (req: Request, res: Response, next: NextFunction) => {
         return res.status(200).json({
             success: true,
-            message: "working successfully!",
+            message: "Working successfully!",
         });
     }
 );
@@ -21,255 +22,249 @@ interface IOrderItemOptions {
     totalPrice: number;
 }
 
+// Place a new order
 export const placeOrder = CatchAsyncError(
     async (req: Request, res: Response, next: NextFunction) => {
+        const { medicineList, deliveryAddress, paymentMethod } =
+            req.body as IOrderOptions;
+
+        // Validate order data
+        if (!medicineList.length || !deliveryAddress || !paymentMethod) {
+            return next(new ErrorHandler("Order data is missing!", 400));
+        }
+
+        // Validate medicine quantity
+        if (medicineList.some((med) => med.quantity < 1)) {
+            return next(
+                new ErrorHandler(
+                    "Each medicine quantity must be greater than '0'.",
+                    400
+                )
+            );
+        }
+
         try {
-            const { medicineList, deliveryAddress, paymentMethod } =
-                req.body as IOrderOptions;
-
-            medicineList.map((medicine, index) => {
-                if (medicine.quantity < 1) {
-                    throw new Error(
-                        "Medicine quantity must be greater the '0' !"
-                    );
-                }
-            });
-
-            if (medicineList.length < 0 || !deliveryAddress || !paymentMethod) {
-                throw new Error("Order data is missing!");
-            }
-
-            let orderMedicines: Array<IOrderItemOptions> = await Promise.all(
+            // Process each medicine and calculate total price
+            const orderMedicines: IOrderItemOptions[] = await Promise.all(
                 medicineList.map(async (medicine) => {
-                    // try {
                     const dbMedicine = await MedicineModel.findById(
                         medicine.medicineId
                     );
 
                     if (!dbMedicine) {
-                        throw new Error("Medicine not found!");
+                        throw new ErrorHandler("Medicine not found.", 404);
                     }
 
-                    const medicineInventory = await InventoryModel.findOne({
+                    const inventory = await InventoryModel.findOne({
                         medicineId: medicine.medicineId,
                     });
-
-                    if (!medicineInventory) {
-                        throw new Error(
-                            `${dbMedicine.name} inventory not found!`
+                    if (!inventory || inventory.quantity < medicine.quantity) {
+                        throw new ErrorHandler(
+                            `${dbMedicine.name} is out of stock or insufficient in inventory.`,
+                            400
                         );
                     }
 
-                    if (medicineInventory.quantity === 0) {
-                        throw new Error(`${dbMedicine.name} Inventory empty!`);
-                    }
-
-                    if (medicineInventory.quantity < medicine.quantity) {
-                        let err = new Error(
-                            `${dbMedicine.name} is out of stack!`
-                        );
-
-                        throw err;
-                    }
-
-                    let totalPriceOfTheMedicine =
-                        dbMedicine.price * medicine.quantity;
-
+                    const totalPrice = dbMedicine.price * medicine.quantity;
                     return {
                         medicineId: dbMedicine._id,
                         quantity: medicine.quantity,
-                        totalPrice: totalPriceOfTheMedicine,
-                    } as IOrderItemOptions;
+                        totalPrice,
+                    } as any;
                 })
             );
 
-            let orderTotalPrice = Number(0);
+            const totalOrderPrice = orderMedicines.reduce(
+                (sum, item) => sum + item.totalPrice,
+                0
+            );
 
-            orderMedicines.map((item) => {
-                orderTotalPrice += item.totalPrice;
-            });
-
-            const dbOrder = new OrderModel({
+            // Save the new order in database
+            const newOrder = new OrderModel({
                 medicineList: orderMedicines,
-                totalPrice: orderTotalPrice.toFixed(2),
+                totalPrice: totalOrderPrice.toFixed(2),
                 paymentMethod,
                 userId: req.user._id,
+                deliveryAddress,
             });
+            await newOrder.save({ validateModifiedOnly: true });
 
-            if (!dbOrder) {
-                throw new Error("Somethings wents wronge!");
-            }
-
-            await dbOrder.save({ validateModifiedOnly: true });
-
-            dbOrder.medicineList.map(async (item) => {
-                let orderMedicinesInventory = await InventoryModel.findOne({
-                    medicineId: item.medicineId,
-                });
-
-                if (orderMedicinesInventory?.quantity) {
-                    orderMedicinesInventory.quantity -= item.quantity;
-
-                    await orderMedicinesInventory.save({
-                        validateModifiedOnly: true,
+            // Update inventory quantities
+            await Promise.all(
+                orderMedicines.map(async (item) => {
+                    const inventory = await InventoryModel.findOne({
+                        medicineId: item.medicineId,
                     });
-                }
-            });
-
-            // send notification email to the user
+                    if (inventory) {
+                        inventory.quantity -= item.quantity;
+                        await inventory.save({ validateModifiedOnly: true });
+                    }
+                })
+            );
 
             return res.status(201).json({
                 success: true,
-                message: "Order placed successfully",
+                message: "Order placed successfully.",
+                order: newOrder,
             });
         } catch (error: any) {
-            console.log("ERROR IN PLACE ORDER :", error.message);
+            console.error("ERROR IN PLACE ORDER :", error.message);
             return next(new ErrorHandler(error.message, 500));
         }
     }
 );
 
+// Retrieve a specific order by ID
 export const getById = CatchAsyncError(
     async (req: Request, res: Response, next: NextFunction) => {
+        const { orderId } = req.params;
+
+        if (!mongoose.Types.ObjectId.isValid(orderId)) {
+            return next(new ErrorHandler("Invalid order ID format.", 400));
+        }
+
         try {
-            const orderId = req.params.orderId;
-            if (!orderId) {
-                throw new Error("Missing order id!");
-            }
-
-            if (!mongoose.Types.ObjectId.isValid(orderId)) {
-                throw new Error("Invalid order id!");
-            }
-
-            const dbOrder = await OrderModel.findById(orderId);
-
-            if (!dbOrder) {
-                throw new Error("Order not found!");
+            const order = await OrderModel.findById(orderId);
+            if (!order) {
+                return next(new ErrorHandler("Order not found.", 404));
             }
 
             return res.status(200).json({
                 success: true,
-                order: dbOrder,
+                order,
             });
         } catch (error: any) {
-            console.log("ERROR IN ORDER GET BY ID :", error.message);
+            console.error("ERROR IN ORDER GET BY ID:", error.message);
             return next(new ErrorHandler(error.message, 500));
         }
     }
 );
 
-export const getAllOrder = CatchAsyncError(
+// Retrieve all orders with optional query filters
+export const getAllOrders = CatchAsyncError(
     async (req: Request, res: Response, next: NextFunction) => {
+        const query = req.body || {};
+
         try {
-            const query = req.body || {};
-
-            const dbOrders = await OrderModel.find(query);
-
-            if (dbOrders.length < 1) {
-                throw new Error("No orders with the corsponding query!");
+            const orders = await OrderModel.find(query);
+            if (!orders.length) {
+                return next(
+                    new ErrorHandler(
+                        "No orders found for the given query.",
+                        404
+                    )
+                );
             }
 
             return res.status(200).json({
                 success: true,
-                orderLen: dbOrders.length,
-                orders: dbOrders,
+                totalOrders: orders.length,
+                orders,
             });
         } catch (error: any) {
-            console.log("ERROR IN ORDER GET ALL :", error.message);
+            console.error("ERROR IN GET ALL ORDERS:", error.message);
             return next(new ErrorHandler(error.message, 500));
         }
     }
 );
 
+// Delete an order by ID
 export const deleteOrder = CatchAsyncError(
     async (req: Request, res: Response, next: NextFunction) => {
+        const { orderId } = req.params;
+
+        if (!mongoose.Types.ObjectId.isValid(orderId)) {
+            return next(new ErrorHandler("Invalid order ID format.", 400));
+        }
+
         try {
-            const deleteOrderId = req.params.orderId;
-
-            if (!deleteOrderId) {
-                throw new Error("Missing order id!");
-            }
-
-            if (!mongoose.Types.ObjectId.isValid(deleteOrderId)) {
-                throw new Error("Invalid order id!");
-            }
-
-            const deletedOrder = await OrderModel.findByIdAndDelete(
-                deleteOrderId
-            );
-
+            const deletedOrder = await OrderModel.findByIdAndDelete(orderId);
             if (!deletedOrder) {
-                throw new Error("Order not found!");
+                return next(new ErrorHandler("Order not found.", 404));
             }
 
-            // todo : update invantory
+            // Optionally: Update inventory if necessary
 
             return res.status(200).json({
                 success: true,
-                message: `Order delelted sucessfully!`,
+                message: "Order deleted successfully.",
             });
         } catch (error: any) {
-            console.log("ERROR IN DELETE ORDER : ", error.message);
+            console.error("ERROR IN DELETE ORDER:", error.message);
             return next(new ErrorHandler(error.message, 500));
         }
     }
 );
 
+// Update an order by ID
 export const updateOrder = CatchAsyncError(
     async (req: Request, res: Response, next: NextFunction) => {
+        const { orderId } = req.params;
+        const updateData = req.body;
+
+        if (!mongoose.Types.ObjectId.isValid(orderId)) {
+            return next(new ErrorHandler("Invalid order ID format.", 400));
+        }
+
+        if (!updateData) {
+            return next(new ErrorHandler("Order update data is missing.", 400));
+        }
+
         try {
-            const orderOption = req.body || {};
-            const orderId = req.params.orderId;
-
-            if (!orderId) {
-                throw new Error("Missing order id!");
-            }
-
-            if (!mongoose.Types.ObjectId.isValid(orderId)) {
-                throw new Error("Invalid order id!");
-            }
-
-            if (!orderOption) {
-                throw new Error("Missing order data!");
-            }
-
             const updatedOrder = await OrderModel.findByIdAndUpdate(
                 orderId,
-                { $set: orderOption },
+                updateData,
                 { new: true }
             );
-
             if (!updatedOrder) {
-                throw new Error("Order not found!");
+                return next(new ErrorHandler("Order not found.", 404));
             }
 
-            return res.status(201).json({
+            return res.status(200).json({
                 success: true,
-                message: "Order updated successfully!",
-                updatedOrder,
+                message: "Order updated successfully.",
+                order: updatedOrder,
             });
         } catch (error: any) {
-            console.log("ERROR IN UPDATE ERROR : ", error.message);
+            console.error("ERROR IN UPDATE ORDER:", error.message);
             return next(new ErrorHandler(error.message, 500));
         }
     }
 );
 
-export const cencelOrder = CatchAsyncError(
+// Cancel an order
+export const cancelOrder = CatchAsyncError(
     async (req: Request, res: Response, next: NextFunction) => {
+        const { orderId } = req.params;
+        const { cancellationReason } = req.body;
+
+        if (!mongoose.Types.ObjectId.isValid(orderId)) {
+            return next(new ErrorHandler("Invalid order ID format.", 400));
+        }
+
+        if (!cancellationReason) {
+            return next(
+                new ErrorHandler("Cancellation reason is required.", 400)
+            );
+        }
+
         try {
-            const orderId = req.params.orderId;
-            const { cencelationReason } = req.body;
-
-            if (!orderId) {
-                throw new Error("Missing order Id!");
+            const order = await OrderModel.findById(orderId);
+            if (!order) {
+                return next(new ErrorHandler("Order not found.", 404));
             }
 
-            if (!mongoose.Types.ObjectId.isValid(orderId)) {
-                throw new Error("Invalid order id!");
-            }
+            order.status = "canceled";
+            order.cancellationReason = cancellationReason;
+            await order.save();
+
+            return res.status(200).json({
+                success: true,
+                message: "Order cancelled successfully.",
+                order,
+            });
         } catch (error: any) {
-            console.log("ERROR IN CENCEL ORDER : ", error.message);
+            console.error("ERROR IN CANCEL ORDER:", error.message);
             return next(new ErrorHandler(error.message, 500));
         }
     }

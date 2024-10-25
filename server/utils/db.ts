@@ -1,16 +1,23 @@
+// Importing Mongoose to interact with MongoDB
 import mongoose from "mongoose";
-require("dotenv").config();
+import dotenv from "dotenv";
 
+// Load environment variables from .env file
+dotenv.config();
+
+// Retrieve the database connection string from environment variables
 const dbUrl: string = process.env.DB_URI || "";
 
-const connectDB = async () => {
+// Function to establish a connection to MongoDB
+const connectDB = async (): Promise<void> => {
     try {
-        await mongoose.connect(dbUrl).then((data: any) => {
-            console.log("Database connected successfully");
-        });
+        // Attempt to connect to MongoDB using the provided URI
+        await mongoose.connect(dbUrl);
+        console.log("Database connected successfully");
     } catch (error: any) {
-        console.log(error.message);
-        setTimeout(connectDB, 5000);
+        // Log the error message and retry connection after 5 seconds in case of failure
+        console.error("Database connection failed:", error.message);
+        setTimeout(connectDB, 5000); // Retry after 5 seconds
     }
 };
 
