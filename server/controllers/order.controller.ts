@@ -5,6 +5,7 @@ import OrderModel, { IOrderOptions } from "../models/order.model";
 import MedicineModel from "../models/medicine.model";
 import mongoose from "mongoose";
 import InventoryModel from "../models/inventory.model";
+import NotificationModel from "../models/notification.model";
 
 // Test route to check API is working
 export const test = CatchAsyncError(
@@ -103,7 +104,13 @@ export const placeOrder = CatchAsyncError(
                 })
             );
 
-            // send notification via socket.io
+            await NotificationModel.create({
+                userId: req.user._id,
+                type: "order",
+                message: "Order placed successfully",
+            });
+
+            // send notification via socket.io`
 
             return res.status(201).json({
                 success: true,
@@ -223,7 +230,13 @@ export const updateOrder = CatchAsyncError(
                 return next(new ErrorHandler("Order not found.", 404));
             }
 
-            // send notification
+            await NotificationModel.create({
+                userId: req.user._id,
+                type: "order",
+                message: `Order status changed to ${updatedOrder.status}`,
+            });
+
+            // send notification via socket.io
 
             return res.status(200).json({
                 success: true,
@@ -263,7 +276,13 @@ export const cancelOrder = CatchAsyncError(
             order.cancellationReason = cancellationReason;
             await order.save();
 
-            // send notification
+            await NotificationModel.create({
+                userId: req.user._id,
+                type: "order",
+                message: "Order cancelled successfully.",
+            });
+
+            // send notification via socket.io
 
             return res.status(200).json({
                 success: true,

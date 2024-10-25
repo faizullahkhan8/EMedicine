@@ -10,6 +10,7 @@ import TokenModel from "../models/token.model";
 import { sendToken, signJwtToken } from "../utils/jwt";
 
 import sendEmail from "../utils/sendEmail";
+import NotificationModel from "../models/notification.model";
 
 const NUM_INCLUDE_REGEX = /^(?=.*\d).{6,}$/;
 
@@ -112,6 +113,14 @@ export const verifyEmail = CatchAsyncError(
 
             res.clearCookie("verification_token");
 
+            await NotificationModel.create({
+                userId: req.user._id,
+                type: "profile",
+                message: "Complete your profile by adding your information",
+            });
+
+            // send notification via socket.io
+
             return res.status(201).json({
                 success: true,
                 message: "User successfully registered!",
@@ -175,6 +184,14 @@ export const login = CatchAsyncError(
                     template: "verification-email.ejs",
                     subject: "Two factor verfication email",
                 });
+
+                await NotificationModel.create({
+                    userId: req.user._id,
+                    type: "greeting",
+                    message: `Welcome back ${req.user.fullname}`,
+                });
+
+                // send notification via socket.io
 
                 return res.status(200).json({
                     success: true,
@@ -520,6 +537,14 @@ export const changePassword = CatchAsyncError(
 
             await user.save({ validateModifiedOnly: true });
 
+            await NotificationModel.create({
+                userId: req.user._id,
+                type: "auth",
+                message: "Password changed successfully.",
+            });
+
+            // send notification via socket.io and send email
+
             return res.status(200).json({
                 success: true,
                 message: "Password changed successfully",
@@ -549,6 +574,8 @@ export const changeAccountStatus = CatchAsyncError(
             user.accountStatus = accountStatus;
 
             await user.save({ validateModifiedOnly: true });
+
+            // send email
 
             return res.status(200).json({
                 success: true,
@@ -726,6 +753,8 @@ export const newPassword = CatchAsyncError(
             user.password = newPassword;
 
             await user.save({ validateModifiedOnly: true });
+
+            // send notification via socket.io and email
 
             return res.status(200).json({
                 success: true,

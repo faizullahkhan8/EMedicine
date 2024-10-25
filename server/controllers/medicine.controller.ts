@@ -5,6 +5,7 @@ import MedicineModel, { IMedicineOptions } from "../models/medicine.model";
 import ReviewModel from "../models/review.model";
 import ReviewReplyModel from "../models/reviewReply.model";
 import InventoryModel from "../models/inventory.model";
+import NotificationModel from "../models/notification.model";
 
 // Create a new medicine entry in the database
 export const createMedicine = CatchAsyncError(
@@ -42,6 +43,14 @@ export const createMedicine = CatchAsyncError(
             medicineId: newMedicine._id,
             quantity: quantity || 0,
         });
+
+        await NotificationModel.create({
+            userId: req.user._id,
+            type: "medicine",
+            message: "Product has successfully registered.",
+        });
+
+        // send notification via socket.io
 
         return res.status(201).json({
             success: true,
@@ -174,6 +183,14 @@ export const deleteMedicine = CatchAsyncError(
         medicine.deletedBy = userId;
         medicine.reviews = [];
         await medicine.save({ validateModifiedOnly: true });
+
+        await NotificationModel.create({
+            userId: req.user._id,
+            type: "medicine",
+            message: "Product is deleted successfully.",
+        });
+
+        // send notification via socket.io
 
         return res.status(200).json({
             success: true,
