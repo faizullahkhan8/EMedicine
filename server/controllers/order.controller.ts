@@ -66,6 +66,7 @@ export const placeOrder = CatchAsyncError(
                     }
 
                     const totalPrice = dbMedicine.price * medicine.quantity;
+
                     return {
                         medicineId: dbMedicine._id,
                         quantity: medicine.quantity,
@@ -101,6 +102,8 @@ export const placeOrder = CatchAsyncError(
                     }
                 })
             );
+
+            // send notification via socket.io
 
             return res.status(201).json({
                 success: true,
@@ -220,6 +223,8 @@ export const updateOrder = CatchAsyncError(
                 return next(new ErrorHandler("Order not found.", 404));
             }
 
+            // send notification
+
             return res.status(200).json({
                 success: true,
                 message: "Order updated successfully.",
@@ -257,6 +262,8 @@ export const cancelOrder = CatchAsyncError(
             order.status = "canceled";
             order.cancellationReason = cancellationReason;
             await order.save();
+
+            // send notification
 
             return res.status(200).json({
                 success: true,

@@ -11,6 +11,7 @@ import medicineRouter from "./routes/medicine.route";
 import reviewRoute from "./routes/review.route";
 import orderRoute from "./routes/order.route";
 import inventoryRoute from "./routes/inventory.route";
+import notificationRoute from "./routes/notification.route";
 
 // Create Express app instance
 export const app = express();
@@ -32,6 +33,7 @@ app.use("/api/v1/medicine", medicineRouter);
 app.use("/api/v1/review", reviewRoute);
 app.use("/api/v1/order", orderRoute);
 app.use("/api/v1/inventory", inventoryRoute);
+app.use("/api/v1/notification", notificationRoute);
 
 // Health check endpoint
 app.get("/test", (req: Request, res: Response, next: NextFunction) => {
