@@ -44,6 +44,7 @@ export const createMedicine = CatchAsyncError(
             quantity: quantity || 0,
         });
 
+        // create a notification instance in db
         await NotificationModel.create({
             userId: req.user._id,
             type: "medicine",
@@ -184,10 +185,12 @@ export const deleteMedicine = CatchAsyncError(
         medicine.reviews = [];
         await medicine.save({ validateModifiedOnly: true });
 
+        // create a notification instance in db
         await NotificationModel.create({
-            userId: req.user._id,
+            userId: medicine.userId,
             type: "medicine",
-            message: "Product is deleted successfully.",
+            message:
+                "Your Product is deleted, if it not your action. Please contact the Admin",
         });
 
         // send notification via socket.io
