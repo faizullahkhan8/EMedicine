@@ -33,3 +33,21 @@ export const getUserNotifications = CatchAsyncError(async (req, res, next) => {
         return next(new ErrorHandler(error.message, 500));
     }
 });
+
+export const toggleNotification = CatchAsyncError(async (req, res, next) => {
+    try {
+        const dbUser = req.user;
+
+        dbUser.notification = !dbUser.notification;
+
+        await dbUser.save({ validateModifiedOnly: true });
+
+        return res.status(200).json({
+            success: true,
+            message: `Notification toggled to ${dbUser.notification}`,
+        });
+    } catch (error: any) {
+        console.log("ERROR IN TOGGLE NOTIFICATION : ", error.message);
+        return next(new ErrorHandler(error.message, 500));
+    }
+});

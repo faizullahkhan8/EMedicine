@@ -22,6 +22,7 @@ export interface IUser extends Document {
     role: "user" | "admin" | "doctor"; // Fixed typo from "docotor"
     twoFactor: boolean;
     searchHistory: string[];
+    notification: boolean;
     completedFields: {
         fullname: boolean;
         address: boolean;
@@ -107,6 +108,10 @@ const userSchema: Schema<IUser> = new Schema(
         searchHistory: {
             type: [String],
             default: [],
+        },
+        notification: {
+            type: Boolean,
+            default: true,
         },
         completedFields: {
             type: Object,
