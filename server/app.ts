@@ -5,6 +5,9 @@ import cookieParser from "cookie-parser";
 import { ErrorMiddleware } from "./middlewares/error.middleware";
 import ErrorHandler from "./utils/ErrorHandler";
 
+import http from "node:http";
+import { Server } from "socket.io";
+
 // Import routers
 import userRouter from "./routes/user.route";
 import medicineRouter from "./routes/medicine.route";
@@ -13,8 +16,10 @@ import orderRoute from "./routes/order.route";
 import inventoryRoute from "./routes/inventory.route";
 import notificationRoute from "./routes/notification.route";
 
-// Create Express app instance
+// // Create Express app instance
 export const app = express();
+export const server = http.createServer(app);
+export const io = new Server(server);
 
 // Configure middleware
 app.use(express.json({ limit: "50mb" })); // Parse JSON requests

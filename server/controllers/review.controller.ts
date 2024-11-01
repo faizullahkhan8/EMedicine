@@ -5,6 +5,7 @@ import MedicineModel from "../models/medicine.model";
 import ReviewModel from "../models/review.model";
 import mongoose from "mongoose";
 import ReviewReplyModel from "../models/reviewReply.model";
+import NotificationModel from "../models/notification.model";
 
 export interface IReviewOptions extends Document {
     userId: string;
@@ -59,6 +60,16 @@ export const submitReview = CatchAsyncError(
         );
 
         await dbMedicine.save({ validateModifiedOnly: true });
+
+        if (req.user.notification) {
+            await NotificationModel.create({
+                userId: dbMedicine.userId,
+                type: "review",
+                message: `Your product ${dbMedicine.name} reviewed by ${req.user.fullname}.`,
+            });
+
+            // send notification by socket.io
+        }
 
         return res.status(200).json({
             success: true,
@@ -146,6 +157,7 @@ export const deleteMedicineReview = CatchAsyncError(
             _id: reviewId,
             userId: req.user._id,
         });
+
         if (!deletedReview)
             return next(
                 new ErrorHandler("Unauthorized or review not found.", 403)
@@ -175,7 +187,7 @@ export const createReviewReply = CatchAsyncError(
         }
 
         // Check if review exists
-        const review = await ReviewModel.findById(reviewId);
+        const review = await ReviewModel.findById(reviewId).populate("userId");
         if (!review) return next(new ErrorHandler("Review not found!", 404));
 
         // Create and save reply
@@ -190,6 +202,8 @@ export const createReviewReply = CatchAsyncError(
         review.reply.push(newReply._id as any);
         await review.save({ validateModifiedOnly: true });
 
+        if (req.user.notification) {
+        }
         return res.status(201).json({
             success: true,
             message: "Review reply created successfully.",

@@ -104,13 +104,15 @@ export const placeOrder = CatchAsyncError(
                 })
             );
 
-            await NotificationModel.create({
-                userId: req.user._id,
-                type: "order",
-                message: "Order placed successfully",
-            });
+            if (req.user.notification) {
+                await NotificationModel.create({
+                    userId: req.user._id,
+                    type: "order",
+                    message: "Order placed successfully",
+                });
 
-            // send notification via socket.io`
+                // send notification via socket.io
+            }
 
             return res.status(201).json({
                 success: true,
@@ -230,13 +232,15 @@ export const updateOrder = CatchAsyncError(
                 return next(new ErrorHandler("Order not found.", 404));
             }
 
-            await NotificationModel.create({
-                userId: req.user._id,
-                type: "order",
-                message: `Order status changed to ${updatedOrder.status}`,
-            });
+            if (req.user.notification) {
+                await NotificationModel.create({
+                    userId: req.user._id,
+                    type: "order",
+                    message: `Order status changed to ${updatedOrder.status}`,
+                });
 
-            // send notification via socket.io
+                // send notification via socket.io
+            }
 
             return res.status(200).json({
                 success: true,
@@ -276,13 +280,15 @@ export const cancelOrder = CatchAsyncError(
             order.cancellationReason = cancellationReason;
             await order.save();
 
-            await NotificationModel.create({
-                userId: req.user._id,
-                type: "order",
-                message: "Order cancelled successfully.",
-            });
+            if (req.user.notification) {
+                await NotificationModel.create({
+                    userId: req.user._id,
+                    type: "order",
+                    message: "Order cancelled successfully.",
+                });
 
-            // send notification via socket.io
+                // send notification via socket.io
+            }
 
             return res.status(200).json({
                 success: true,

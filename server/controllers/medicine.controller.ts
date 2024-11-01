@@ -45,13 +45,14 @@ export const createMedicine = CatchAsyncError(
         });
 
         // create a notification instance in db
-        await NotificationModel.create({
-            userId: req.user._id,
-            type: "medicine",
-            message: "Product has successfully registered.",
-        });
-
-        // send notification via socket.io
+        if (req.user.notification) {
+            await NotificationModel.create({
+                userId: req.user._id,
+                type: "medicine",
+                message: "Product has successfully registered.",
+            });
+            // send notification via socket.io
+        }
 
         return res.status(201).json({
             success: true,
@@ -186,14 +187,16 @@ export const deleteMedicine = CatchAsyncError(
         await medicine.save({ validateModifiedOnly: true });
 
         // create a notification instance in db
-        await NotificationModel.create({
-            userId: medicine.userId,
-            type: "medicine",
-            message:
-                "Your Product is deleted, if it not your action. Please contact the Admin",
-        });
+        if (req.user.notification) {
+            await NotificationModel.create({
+                userId: medicine.userId,
+                type: "medicine",
+                message:
+                    "Your Product is deleted, if it not your action. Please contact the Admin",
+            });
 
-        // send notification via socket.io
+            // send notification via socket.io
+        }
 
         return res.status(200).json({
             success: true,
