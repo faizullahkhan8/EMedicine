@@ -6,6 +6,7 @@ import MedicineModel from "../models/medicine.model";
 import mongoose from "mongoose";
 import InventoryModel from "../models/inventory.model";
 import NotificationModel from "../models/notification.model";
+import { getReciverSocketId, io } from "../socket/socket";
 
 // Test route to check API is working
 export const test = CatchAsyncError(
@@ -89,6 +90,7 @@ export const placeOrder = CatchAsyncError(
                 userId: req.user._id,
                 deliveryAddress,
             });
+
             await newOrder.save({ validateModifiedOnly: true });
 
             // Update inventory quantities
@@ -104,14 +106,22 @@ export const placeOrder = CatchAsyncError(
                 })
             );
 
-            if (req.user.notification) {
-                await NotificationModel.create({
-                    userId: req.user._id,
-                    type: "order",
-                    message: "Order placed successfully",
-                });
+            // create the instance of notificaton
+            const notification = new NotificationModel({
+                userId: req.user._id,
+                type: "order",
+                message: "Order placed successfully",
+            });
 
-                // send notification via socket.io
+            await notification.save({ validateModifiedOnly: true });
+
+            // send the notification via socket.io if user has enabled
+            if (req.user.notification) {
+                const userSocketId = getReciverSocketId(req.user._id);
+
+                if (userSocketId) {
+                    io.to(userSocketId).emit("notification", notification);
+                }
             }
 
             return res.status(201).json({
@@ -228,18 +238,27 @@ export const updateOrder = CatchAsyncError(
                 updateData,
                 { new: true }
             );
+
             if (!updatedOrder) {
                 return next(new ErrorHandler("Order not found.", 404));
             }
 
-            if (req.user.notification) {
-                await NotificationModel.create({
-                    userId: req.user._id,
-                    type: "order",
-                    message: `Order status changed to ${updatedOrder.status}`,
-                });
+            // create the instance of notificaton
+            const notification = new NotificationModel({
+                userId: req.user._id,
+                type: "order",
+                message: `Order status changed to ${updatedOrder.status}`,
+            });
 
-                // send notification via socket.io
+            await notification.save({ validateModifiedOnly: true });
+
+            // send the notification via socket.io if user has enabled
+            if (req.user.notification) {
+                const userSocketId = getReciverSocketId(req.user._id);
+
+                if (userSocketId) {
+                    io.to(userSocketId).emit("notification", notification);
+                }
             }
 
             return res.status(200).json({
@@ -280,14 +299,22 @@ export const cancelOrder = CatchAsyncError(
             order.cancellationReason = cancellationReason;
             await order.save();
 
-            if (req.user.notification) {
-                await NotificationModel.create({
-                    userId: req.user._id,
-                    type: "order",
-                    message: "Order cancelled successfully.",
-                });
+            // create the instance of notificaton
+            const notification = new NotificationModel({
+                userId: req.user._id,
+                type: "order",
+                message: `Order cancelled successfully.`,
+            });
 
-                // send notification via socket.io
+            await notification.save({ validateModifiedOnly: true });
+
+            // send the notification via socket.io if user has enabled
+            if (req.user.notification) {
+                const userSocketId = getReciverSocketId(req.user._id);
+
+                if (userSocketId) {
+                    io.to(userSocketId).emit("notification", notification);
+                }
             }
 
             return res.status(200).json({
