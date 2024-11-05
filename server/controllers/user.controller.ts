@@ -11,6 +11,7 @@ import { sendToken, signJwtToken } from "../utils/jwt";
 
 import sendEmail from "../utils/sendEmail";
 import NotificationModel from "../models/notification.model";
+import { getReciverSocketId, io } from "../socket/socket";
 
 const NUM_INCLUDE_REGEX = /^(?=.*\d).{6,}$/;
 
@@ -113,13 +114,22 @@ export const verifyEmail = CatchAsyncError(
 
             res.clearCookie("verification_token");
 
-            await NotificationModel.create({
-                userId: req.user._id,
-                type: "profile",
-                message: "Complete your profile by adding your information",
-            });
-
             // send notification via socket.io
+            if (req.user.notification) {
+                const notification = new NotificationModel({
+                    userId: req.user._id,
+                    type: "profile",
+                    message: "Complete your profile by adding your information",
+                });
+
+                await notification.save({ validateModifiedOnly: true });
+
+                const userSocketId = getReciverSocketId(req.user._id);
+
+                if (userSocketId) {
+                    io.to(userSocketId).emit("notification", notification);
+                }
+            }
 
             return res.status(201).json({
                 success: true,
@@ -185,13 +195,21 @@ export const login = CatchAsyncError(
                     subject: "Two factor verfication email",
                 });
 
-                await NotificationModel.create({
-                    userId: req.user._id,
-                    type: "greeting",
-                    message: `Welcome back ${req.user.fullname}`,
-                });
+                if (req.user.notification) {
+                    const notification = new NotificationModel({
+                        userId: req.user._id,
+                        type: "profile",
+                        message: `Welcome back ${req.user.fullname}`,
+                    });
 
-                // send notification via socket.io
+                    await notification.save({ validateModifiedOnly: true });
+
+                    const userSocketId = getReciverSocketId(req.user._id);
+
+                    if (userSocketId) {
+                        io.to(userSocketId).emit("notification", notification);
+                    }
+                }
 
                 return res.status(200).json({
                     success: true,
@@ -537,13 +555,7 @@ export const changePassword = CatchAsyncError(
 
             await user.save({ validateModifiedOnly: true });
 
-            await NotificationModel.create({
-                userId: req.user._id,
-                type: "auth",
-                message: "Password changed successfully.",
-            });
-
-            // send notification via socket.io and send email
+            // send email
 
             return res.status(200).json({
                 success: true,
@@ -754,7 +766,7 @@ export const newPassword = CatchAsyncError(
 
             await user.save({ validateModifiedOnly: true });
 
-            // send notification via socket.io and email
+            // send email
 
             return res.status(200).json({
                 success: true,

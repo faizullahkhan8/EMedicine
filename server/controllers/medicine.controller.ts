@@ -47,17 +47,17 @@ export const createMedicine = CatchAsyncError(
             quantity: quantity || 0,
         });
 
-        // create the instance of notificaton
-        const notification = new NotificationModel({
-            userId: req.user._id,
-            type: "medicine",
-            message: "Product has successfully registered.",
-        });
-
-        await notification.save({ validateModifiedOnly: true });
-
         // send the notification via socket.io if user has enabled
         if (req.user.notification) {
+            // create the instance of notificaton
+            const notification = new NotificationModel({
+                userId: req.user._id,
+                type: "medicine",
+                message: "Product has successfully registered.",
+            });
+
+            await notification.save({ validateModifiedOnly: true });
+
             const userSocketId = getReciverSocketId(req.user._id);
 
             if (userSocketId) {
@@ -197,18 +197,17 @@ export const deleteMedicine = CatchAsyncError(
         medicine.reviews = [];
         await medicine.save({ validateModifiedOnly: true });
 
-        // create the instance of notificaton
-        const notification = new NotificationModel({
-            userId: medicine.userId,
-            type: "medicine",
-            message:
-                "Your Product is deleted, if it not your action. Please contact the Admin",
-        });
-
-        await notification.save({ validateModifiedOnly: true });
-
         // send the notification via socket.io if user has enabled
         if (req.user.notification) {
+            // create the instance of notificaton
+            const notification = new NotificationModel({
+                userId: medicine.userId,
+                type: "medicine",
+                message: `Your Product: { name: ${medicine.name} } is deleted, if this is not your action. Please contact the Admin`,
+            });
+
+            await notification.save({ validateModifiedOnly: true });
+
             const userSocketId = getReciverSocketId(medicine.userId);
 
             if (userSocketId) {

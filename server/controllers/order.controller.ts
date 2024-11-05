@@ -106,17 +106,17 @@ export const placeOrder = CatchAsyncError(
                 })
             );
 
-            // create the instance of notificaton
-            const notification = new NotificationModel({
-                userId: req.user._id,
-                type: "order",
-                message: "Order placed successfully",
-            });
-
-            await notification.save({ validateModifiedOnly: true });
-
             // send the notification via socket.io if user has enabled
             if (req.user.notification) {
+                // create the instance of notificaton
+                const notification = new NotificationModel({
+                    userId: req.user._id,
+                    type: "order",
+                    message: "Order placed successfully",
+                });
+
+                await notification.save({ validateModifiedOnly: true });
+
                 const userSocketId = getReciverSocketId(req.user._id);
 
                 if (userSocketId) {
@@ -243,17 +243,17 @@ export const updateOrder = CatchAsyncError(
                 return next(new ErrorHandler("Order not found.", 404));
             }
 
-            // create the instance of notificaton
-            const notification = new NotificationModel({
-                userId: req.user._id,
-                type: "order",
-                message: `Order status changed to ${updatedOrder.status}`,
-            });
-
-            await notification.save({ validateModifiedOnly: true });
-
             // send the notification via socket.io if user has enabled
             if (req.user.notification) {
+                // create the instance of notificaton
+                const notification = new NotificationModel({
+                    userId: req.user._id,
+                    type: "order",
+                    message: `Order status changed to ${updatedOrder.status}`,
+                });
+
+                await notification.save({ validateModifiedOnly: true });
+
                 const userSocketId = getReciverSocketId(req.user._id);
 
                 if (userSocketId) {
@@ -325,17 +325,17 @@ export const cancelOrder = CatchAsyncError(
                 }),
             ]);
 
-            // create the instance of notificaton
-            const notification = new NotificationModel({
-                userId: req.user._id,
-                type: "order",
-                message: `Order cancelled successfully.`,
-            });
-
-            await notification.save({ validateModifiedOnly: true });
-
             // send the notification via socket.io if user has enabled
             if (req.user.notification) {
+                // create the instance of notificaton
+                const notification = new NotificationModel({
+                    userId: req.user._id,
+                    type: "order",
+                    message: `Order cancelled successfully.`,
+                });
+
+                await notification.save({ validateModifiedOnly: true });
+
                 const userSocketId = getReciverSocketId(req.user._id);
 
                 if (userSocketId) {
