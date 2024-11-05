@@ -10,9 +10,6 @@ import TokenModel from "../models/token.model";
 import { sendToken, signJwtToken } from "../utils/jwt";
 
 import sendEmail from "../utils/sendEmail";
-import NotificationModel from "../models/notification.model";
-import { getReciverSocketId, io } from "../socket/socket";
-
 const NUM_INCLUDE_REGEX = /^(?=.*\d).{6,}$/;
 
 export const Register = CatchAsyncError(
@@ -114,23 +111,6 @@ export const verifyEmail = CatchAsyncError(
 
             res.clearCookie("verification_token");
 
-            // send notification via socket.io
-            if (req.user.notification) {
-                const notification = new NotificationModel({
-                    userId: req.user._id,
-                    type: "profile",
-                    message: "Complete your profile by adding your information",
-                });
-
-                await notification.save({ validateModifiedOnly: true });
-
-                const userSocketId = getReciverSocketId(req.user._id);
-
-                if (userSocketId) {
-                    io.to(userSocketId).emit("notification", notification);
-                }
-            }
-
             return res.status(201).json({
                 success: true,
                 message: "User successfully registered!",
@@ -194,22 +174,6 @@ export const login = CatchAsyncError(
                     template: "verification-email.ejs",
                     subject: "Two factor verfication email",
                 });
-
-                if (req.user.notification) {
-                    const notification = new NotificationModel({
-                        userId: req.user._id,
-                        type: "profile",
-                        message: `Welcome back ${req.user.fullname}`,
-                    });
-
-                    await notification.save({ validateModifiedOnly: true });
-
-                    const userSocketId = getReciverSocketId(req.user._id);
-
-                    if (userSocketId) {
-                        io.to(userSocketId).emit("notification", notification);
-                    }
-                }
 
                 return res.status(200).json({
                     success: true,

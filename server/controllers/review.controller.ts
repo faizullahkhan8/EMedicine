@@ -6,6 +6,7 @@ import ReviewModel from "../models/review.model";
 import mongoose from "mongoose";
 import ReviewReplyModel from "../models/reviewReply.model";
 import NotificationModel from "../models/notification.model";
+import { getReciverSocketId, io } from "../socket/socket";
 
 export interface IReviewOptions extends Document {
     userId: string;
@@ -62,13 +63,20 @@ export const submitReview = CatchAsyncError(
         await dbMedicine.save({ validateModifiedOnly: true });
 
         if (req.user.notification) {
-            await NotificationModel.create({
+            const notification = new NotificationModel({
                 userId: dbMedicine.userId,
                 type: "review",
                 message: `Your product ${dbMedicine.name} reviewed by ${req.user.fullname}.`,
             });
 
+            await notification.save({ validateModifiedOnly: true });
+
             // send notification by socket.io
+            const userSocketId = getReciverSocketId(dbMedicine.userId);
+
+            if (userSocketId) {
+                io.to(userSocketId).emit("notification", notification);
+            }
         }
 
         return res.status(200).json({
@@ -187,7 +195,7 @@ export const createReviewReply = CatchAsyncError(
         }
 
         // Check if review exists
-        const review = await ReviewModel.findById(reviewId).populate("userId");
+        const review = await ReviewModel.findById(reviewId);
         if (!review) return next(new ErrorHandler("Review not found!", 404));
 
         // Create and save reply
@@ -196,6 +204,7 @@ export const createReviewReply = CatchAsyncError(
             userId: req.user._id,
             reviewId,
         });
+
         await newReply.save();
 
         // Associate reply with the review
@@ -203,7 +212,21 @@ export const createReviewReply = CatchAsyncError(
         await review.save({ validateModifiedOnly: true });
 
         if (req.user.notification) {
+            const notification = new NotificationModel({
+                userId: review.userId, // main repaly user
+                message: `You have new review replay by ${req.user.fullname}.`,
+                type: "review",
+            });
+
+            await notification.save({ validateModifiedOnly: true });
+
+            const userSocketId = getReciverSocketId(review.userId);
+
+            if (userSocketId) {
+                io.to(userSocketId).emit("notification", notification);
+            }
         }
+
         return res.status(201).json({
             success: true,
             message: "Review reply created successfully.",
