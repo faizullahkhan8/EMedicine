@@ -84,15 +84,20 @@ export const updateInventory = CatchAsyncError(
 );
 
 // Get products with low quantity based on query parameters
-export const lowQuantityProductsAlert = CatchAsyncError(
+export const getLowQuantityProducts = CatchAsyncError(
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             const quantity = req.body.quantity;
 
             // Find inventories based on the provided query
-            const inventories = await InventoryModel.find({
-                quantity: { $lt: quantity },
-            });
+            const inventories: any =
+                quantity !== undefined
+                    ? await InventoryModel.find({
+                          quantity: { $lt: quantity },
+                      }).sort({ quantity: 1 })
+                    : await InventoryModel.find({
+                          $expr: { $lt: ["$quantity", "$lowestQuantity"] },
+                      }).sort({ quantity: 1 });
 
             if (!inventories.length) {
                 // Return error if no matching products found

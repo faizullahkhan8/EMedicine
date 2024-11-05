@@ -3,7 +3,7 @@ import { Router } from "express";
 import { authorizeRole, isAuthenticated } from "../middlewares/auth";
 import {
     getByMedicineId,
-    lowQuantityProductsAlert,
+    getLowQuantityProducts,
     updateInventory,
 } from "../controllers/inventory.controller";
 
@@ -42,7 +42,7 @@ router.get(
     "/low-quantity-products",
     isAuthenticated,
     authorizeRole("admin"),
-    lowQuantityProductsAlert
+    getLowQuantityProducts
 );
 
 // Export the router

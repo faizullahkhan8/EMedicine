@@ -6,6 +6,9 @@ import ReviewModel from "../models/review.model";
 import ReviewReplyModel from "../models/reviewReply.model";
 import InventoryModel from "../models/inventory.model";
 import NotificationModel from "../models/notification.model";
+import { getReciverSocketId, io } from "../socket/socket";
+
+// [ATTENTION] implement the medicine registeration request and approval logic
 
 // Create a new medicine entry in the database
 export const createMedicine = CatchAsyncError(
@@ -44,14 +47,22 @@ export const createMedicine = CatchAsyncError(
             quantity: quantity || 0,
         });
 
-        // create a notification instance in db
+        // create the instance of notificaton
+        const notification = new NotificationModel({
+            userId: req.user._id,
+            type: "medicine",
+            message: "Product has successfully registered.",
+        });
+
+        await notification.save({ validateModifiedOnly: true });
+
+        // send the notification via socket.io if user has enabled
         if (req.user.notification) {
-            await NotificationModel.create({
-                userId: req.user._id,
-                type: "medicine",
-                message: "Product has successfully registered.",
-            });
-            // send notification via socket.io
+            const userSocketId = getReciverSocketId(req.user._id);
+
+            if (userSocketId) {
+                io.to(userSocketId).emit("notification", notification);
+            }
         }
 
         return res.status(201).json({
@@ -186,16 +197,23 @@ export const deleteMedicine = CatchAsyncError(
         medicine.reviews = [];
         await medicine.save({ validateModifiedOnly: true });
 
-        // create a notification instance in db
-        if (req.user.notification) {
-            await NotificationModel.create({
-                userId: medicine.userId,
-                type: "medicine",
-                message:
-                    "Your Product is deleted, if it not your action. Please contact the Admin",
-            });
+        // create the instance of notificaton
+        const notification = new NotificationModel({
+            userId: medicine.userId,
+            type: "medicine",
+            message:
+                "Your Product is deleted, if it not your action. Please contact the Admin",
+        });
 
-            // send notification via socket.io
+        await notification.save({ validateModifiedOnly: true });
+
+        // send the notification via socket.io if user has enabled
+        if (req.user.notification) {
+            const userSocketId = getReciverSocketId(medicine.userId);
+
+            if (userSocketId) {
+                io.to(userSocketId).emit("notification", notification);
+            }
         }
 
         return res.status(200).json({

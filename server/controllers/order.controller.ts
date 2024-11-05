@@ -295,9 +295,35 @@ export const cancelOrder = CatchAsyncError(
                 return next(new ErrorHandler("Order not found.", 404));
             }
 
+            if (
+                order.status === "canceled" ||
+                order.status === "delivered" ||
+                order.status === "shipped"
+            ) {
+                return next(
+                    new ErrorHandler("Order cannot be cencelled now", 400)
+                );
+            }
+
             order.status = "canceled";
             order.cancellationReason = cancellationReason;
             await order.save();
+
+            await Promise.all([
+                order.medicineList.map(async (medicine) => {
+                    const medicineInentory = await InventoryModel.findOne({
+                        medicineId: medicine.medicineId,
+                    });
+
+                    //[ATTENTION] review leter for (if the medicineInventory.quantity is "0" then what wil happen)
+
+                    if (medicineInentory?.quantity) {
+                        medicineInentory.quantity += medicine.quantity;
+
+                        medicineInentory.save({ validateModifiedOnly: true });
+                    }
+                }),
+            ]);
 
             // create the instance of notificaton
             const notification = new NotificationModel({
