@@ -21,6 +21,7 @@ export interface IMedicineOptions extends Document {
     popularity?: number; // Optional popularity score
     isDeleted: boolean; // Flag for soft deletion
     deletedBy?: mongoose.Types.ObjectId; // ID of the user who deleted the medicine
+    isApproved: boolean;
 }
 
 // Schema definition for the Medicine model
@@ -101,6 +102,10 @@ const medicineSchema: Schema<IMedicineOptions> = new Schema(
         deletedBy: {
             type: mongoose.SchemaTypes.ObjectId,
             ref: "Users", // Reference to the Users collection
+        },
+        isApproved: {
+            type: Boolean,
+            default: false,
         },
     },
     {

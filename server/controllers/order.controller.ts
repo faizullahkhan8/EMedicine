@@ -60,6 +60,7 @@ export const placeOrder = CatchAsyncError(
                     const inventory = await InventoryModel.findOne({
                         medicineId: medicine.medicineId,
                     });
+
                     if (!inventory || inventory.quantity < medicine.quantity) {
                         throw new ErrorHandler(
                             `${dbMedicine.name} is out of stock or insufficient in inventory.`,

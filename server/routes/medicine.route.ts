@@ -6,6 +6,7 @@ import {
     getAllMedicines,
     getById,
     listPopularMedicine,
+    medicineApproval,
     updateMedicine,
 } from "../controllers/medicine.controller";
 
@@ -60,6 +61,13 @@ router.delete(
     isAuthenticated,
     authorizeRole("admin", "doctor"),
     deleteMedicine
+);
+
+router.put(
+    "/approval",
+    isAuthenticated,
+    authorizeRole("admin", "doctor"),
+    medicineApproval
 );
 
 export default router;

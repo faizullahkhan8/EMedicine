@@ -42,18 +42,13 @@ export const createMedicine = CatchAsyncError(
 
         await newMedicine.save({ validateModifiedOnly: true });
 
-        await InventoryModel.create({
-            medicineId: newMedicine._id,
-            quantity: quantity || 0,
-        });
-
         // send the notification via socket.io if user has enabled
         if (req.user.notification) {
             // create the instance of notificaton
             const notification = new NotificationModel({
                 userId: req.user._id,
                 type: "medicine",
-                message: "Product has successfully registered.",
+                message: "Product pending for approval.",
             });
 
             await notification.save({ validateModifiedOnly: true });
@@ -67,9 +62,71 @@ export const createMedicine = CatchAsyncError(
 
         return res.status(201).json({
             success: true,
-            message: "Medicine created successfully.",
+            message: "Medicine is pending for approval.",
             medicine: newMedicine,
         });
+    }
+);
+
+// approve medicine
+export const medicineApproval = CatchAsyncError(
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const { medicineId } = req.body;
+
+            if (!medicineId) {
+                return next(new ErrorHandler("Missing medicine id.", 400));
+            }
+
+            const dbMedicine = (await MedicineModel.findById(
+                medicineId
+            ).populate("userId")) as any;
+
+            if (!dbMedicine) {
+                return next(new ErrorHandler("Medicine not found.", 404));
+            }
+
+            if (dbMedicine?.isApproved) {
+                return next(
+                    new ErrorHandler("Medicine already approved.", 409)
+                );
+            }
+
+            dbMedicine.isApproved = true;
+
+            await dbMedicine.save({ validateModifiedOnly: true });
+
+            await InventoryModel.create({
+                medicineId: dbMedicine._id,
+            });
+
+            // send Notification to the medicine user
+            if (dbMedicine.userId.notification) {
+                const notification = new NotificationModel({
+                    userId: dbMedicine.userId._id,
+                    type: "medicine",
+                    message: `Your product: Name: ${dbMedicine.name}, Category:${dbMedicine.category}, Type:${dbMedicine.type} has been successfully approved.`,
+                });
+
+                await notification.save({ validateModifiedOnly: true });
+
+                const userSocketId = getReciverSocketId(
+                    dbMedicine.userId._id.toString()
+                );
+
+                if (userSocketId) {
+                    io.to(userSocketId).emit("notification", notification);
+                }
+            }
+
+            return res.status(201).json({
+                success: true,
+                message: "Medicine successfully approved",
+            });
+        } catch (error: any) {
+            console.log("ERROR IN MEDICINE APPROVAL :", error.message);
+            return next(new ErrorHandler(error.message, 500));
+        }
     }
 );
 

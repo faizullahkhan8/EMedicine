@@ -17,7 +17,6 @@ const inventorySchema: Schema<IInventoryOptions> = new mongoose.Schema(
         },
         quantity: {
             type: Number, // Quantity must be a number
-            required: true, // This field is required
             default: 0, // Default value set to 0
         },
         lowestQuantity: {
