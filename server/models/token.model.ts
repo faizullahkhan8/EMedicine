@@ -8,7 +8,7 @@ import {
 } from "mongoose";
 
 // Define the structure of TokenOptions data for MongoDB
-interface ITokenOptions {
+interface ITokenOptions extends Document {
     token: string; // JWT or any authentication token
     userId: ObjectId; // References the User document
 }
