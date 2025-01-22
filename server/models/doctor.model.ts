@@ -1,6 +1,7 @@
 import mongoose, { Document, model, Schema } from "mongoose";
+import bcrypt from "bcryptjs";
 
-interface IDoctorOptions extends Document {
+export interface IDoctorOptions extends Document {
     name: string;
     email: string;
     cnic: number;
@@ -14,14 +15,13 @@ interface IDoctorOptions extends Document {
     totalAvailableHours: number;
     userAccountId?: string;
     currentStatus: {
-        free: boolean;
-        busy: boolean;
+        isFree: boolean;
     }; // if current status is true it means that doctor is available and vice versa
     timing: {
         openTime: string; // find the correct data type for the open time
         closeTime: string; // find the correct data type for the close time
         daysInWeek: {
-            nameOftheDays: string[];
+            nameOfTheDays: string[];
         };
     };
     qualification: {
@@ -40,18 +40,18 @@ interface IDoctorOptions extends Document {
 const doctorSchema: Schema<IDoctorOptions> = new Schema({
     name: {
         type: String,
-        required: true,
+        required: [true, "Name is required"],
         trim: true,
     },
     email: {
         type: String,
-        required: true,
+        required: [true, "Email is required."],
         trim: true,
         unique: true,
     },
     cnic: {
         type: Number,
-        required: true,
+        required: [true, "CNIC is required."],
         trim: true,
         unique: true,
     },
@@ -66,17 +66,16 @@ const doctorSchema: Schema<IDoctorOptions> = new Schema({
         default: [],
         min: 1,
         max: 10,
-        required: true,
+        required: [true, "Contact No is required"],
     },
     address: {
         type: String,
-        required: true,
+        required: [true, "Address is required"],
         trim: true,
         maxlength: [50, "Address must be at least 50 characters long"],
     },
     totalAvailableHours: {
         type: Number,
-        required: true,
     },
     userAccountId: {
         type: mongoose.SchemaTypes.ObjectId,
@@ -85,24 +84,23 @@ const doctorSchema: Schema<IDoctorOptions> = new Schema({
     currentStatus: {
         type: Object,
         default: {
-            free: false,
-            busy: false,
+            isFree: false,
         },
     },
     timing: {
         type: Object,
-        required: true,
+        required: [true, "Please set your timing."],
         default: {
             openTime: "",
             closeTime: "",
             daysInWeek: {
-                nameOftheDays: [],
+                nameOfTheDays: [],
             },
         },
     },
     qualification: {
         type: [Object],
-        required: true,
+        required: [true, "Qualification is required"],
         default: [
             {
                 title: "",
@@ -113,7 +111,7 @@ const doctorSchema: Schema<IDoctorOptions> = new Schema({
     },
     fees: {
         type: Number,
-        required: true,
+        required: [true, "Please set your Fees"],
     },
     profilePic: {
         type: String,
@@ -128,7 +126,7 @@ const doctorSchema: Schema<IDoctorOptions> = new Schema({
     gender: {
         type: String,
         enum: ["male", "female"],
-        required: true,
+        required: [true, "Gender is required."],
         trim: true,
     },
     messageForPatient: {
@@ -136,6 +134,14 @@ const doctorSchema: Schema<IDoctorOptions> = new Schema({
         trim: true,
         maxlength: 255,
     },
+});
+
+doctorSchema.pre<IDoctorOptions>("save", async function (next) {
+    if (this.isModified("password")) {
+        this.password = await bcrypt.hash(this.password, 10);
+    }
+
+    next();
 });
 
 const doctorModel: mongoose.Model<IDoctorOptions> = model(
