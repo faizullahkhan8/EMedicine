@@ -32,7 +32,7 @@ export const Register = CatchAsyncError(
                 throw new Error("Username already taken!");
             }
 
-            if (NUM_INCLUDE_REGEX.test(password)) {
+            if (!NUM_INCLUDE_REGEX.test(password)) {
                 throw new Error(
                     "Password must be 6 character and consists of atleast 1 number"
                 );
