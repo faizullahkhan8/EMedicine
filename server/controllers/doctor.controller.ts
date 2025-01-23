@@ -2,6 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import { CatchAsyncError } from "../middlewares/catchAsyncError";
 import ErrorHandler from "../utils/ErrorHandler";
 import DoctorModel, { IDoctorOptions } from "../models/doctor.model";
+import NotificationModel from "../models/notification.model";
+import { getReciverSocketId, io } from "../socket/socket";
 
 export const requestDoctorAccount = CatchAsyncError(
     async (req: Request, res: Response, next: NextFunction) => {
@@ -70,6 +72,25 @@ export const approveDoctorAccount = CatchAsyncError(
             await dbDoctorAccount.save({ validateModifiedOnly: true });
 
             // send notification
+            if (req.user.notification) {
+                const newNotification = new NotificationModel({
+                    userId: dbDoctorAccount.userAccountId,
+                    type: "Account",
+                    message: `${dbDoctorAccount.name} has been approved successfully. Now you can login with the specified credentials.`,
+                });
+
+                const userSocketId = getReciverSocketId(
+                    dbDoctorAccount.userAccountId
+                );
+
+                console.log(newNotification);
+
+                if (userSocketId) {
+                    io.to(userSocketId).emit("notification", newNotification);
+                }
+
+                await newNotification.save();
+            }
 
             return res.status(200).json({
                 success: true,
