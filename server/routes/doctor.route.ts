@@ -1,6 +1,9 @@
 import { Router } from "express";
-import { isAuthenticated } from "../middlewares/auth";
-import { requestDoctorAccount } from "../controllers/doctor.controller";
+import { authorizeRole, isAuthenticated } from "../middlewares/auth";
+import {
+    approveDoctorAccount,
+    requestDoctorAccount,
+} from "../controllers/doctor.controller";
 
 const router = Router();
 
@@ -12,5 +15,12 @@ router.get("/test", (req, res) => {
 });
 
 router.post("/request-account", isAuthenticated, requestDoctorAccount);
+
+router.post(
+    "/approve-account-request/:accountId",
+    isAuthenticated,
+    authorizeRole("admin"),
+    approveDoctorAccount
+);
 
 export default router;

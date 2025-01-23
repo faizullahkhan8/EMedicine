@@ -47,3 +47,37 @@ export const requestDoctorAccount = CatchAsyncError(
         }
     }
 );
+
+export const approveDoctorAccount = CatchAsyncError(
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const accountId = req.params.accountId;
+
+            if (!accountId) {
+                return next(
+                    new ErrorHandler("Please provide a account ID", 404)
+                );
+            }
+
+            const dbDoctorAccount = await DoctorModel.findById(accountId);
+
+            if (!dbDoctorAccount) {
+                return next(new ErrorHandler("Doctor account not found!", 404));
+            }
+
+            dbDoctorAccount.isApproved = true;
+
+            await dbDoctorAccount.save({ validateModifiedOnly: true });
+
+            // send notification
+
+            return res.status(200).json({
+                success: true,
+                message: "Doctor account approved successfully.",
+            });
+        } catch (error: any) {
+            console.log("Error in request doctor account : ", error.message);
+            return next(new ErrorHandler(error.message, 500));
+        }
+    }
+);
