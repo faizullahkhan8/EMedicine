@@ -4,6 +4,7 @@ import ErrorHandler from "../utils/ErrorHandler";
 import DoctorModel, { IDoctorOptions } from "../models/doctor.model";
 import NotificationModel from "../models/notification.model";
 import { getReciverSocketId, io } from "../socket/socket";
+import mongoose from "mongoose";
 
 // create doctor account
 export const requestDoctorAccount = CatchAsyncError(
@@ -147,6 +148,47 @@ export const getAllNotApprovedDoctors = CatchAsyncError(
             });
         } catch (error: any) {
             console.log("Error in get all not approved : ", error.message);
+            return next(new ErrorHandler(error.message, 500));
+        }
+    }
+);
+
+export const banDoctor = CatchAsyncError(
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const doctorId = req.params.doctorId;
+
+            if (!mongoose.Types.ObjectId.isValid(doctorId)) {
+                return next(new ErrorHandler("Invalid doctor Id", 400));
+            }
+
+            const { reason, duration } = req.body;
+
+            const dbDoctor = await DoctorModel.findById(doctorId);
+
+            if (!dbDoctor) {
+                return next(new ErrorHandler("Doctor account not found!", 404));
+            }
+
+            if (dbDoctor.ban.isBanned) {
+                return next(new ErrorHandler("Doctor already banned!", 400));
+            }
+
+            const defaultBanMessage =
+                "You have banned by the administrator. Please contact the administrator.";
+
+            dbDoctor.ban.isBanned = true;
+            dbDoctor.ban.reason = reason || defaultBanMessage;
+            dbDoctor.ban.duration = duration;
+
+            await dbDoctor.save({ validateModifiedOnly: true });
+
+            return res.status(201).json({
+                success: true,
+                message: `${dbDoctor.name},${dbDoctor.email} banned successfully.`,
+            });
+        } catch (error: any) {
+            console.log("Error in banDoctor : ", error.message);
             return next(new ErrorHandler(error.message, 500));
         }
     }

@@ -2,6 +2,7 @@ import { Router } from "express";
 import { authorizeRole, isAuthenticated } from "../middlewares/auth";
 import {
     approveDoctorAccount,
+    banDoctor,
     getAllDoctors,
     getAllNotApprovedDoctors,
     requestDoctorAccount,
@@ -32,6 +33,13 @@ router.get(
     isAuthenticated,
     authorizeRole("admin"),
     getAllNotApprovedDoctors
+);
+
+router.put(
+    "/ban/:doctorId",
+    isAuthenticated,
+    authorizeRole("admin"),
+    banDoctor
 );
 
 export default router;

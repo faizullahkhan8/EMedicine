@@ -35,6 +35,11 @@ export interface IDoctorOptions extends Document {
     specialization: string[];
     gender: string;
     messageForPatient: string;
+    ban: {
+        isBanned: boolean;
+        reason: string;
+        duration: Date;
+    };
 }
 
 const doctorSchema: Schema<IDoctorOptions> = new Schema({
@@ -133,6 +138,14 @@ const doctorSchema: Schema<IDoctorOptions> = new Schema({
         type: String,
         trim: true,
         maxlength: 255,
+    },
+    ban: {
+        type: Object,
+        default: {
+            isBanned: false,
+            reason: "",
+            duration: undefined,
+        },
     },
 });
 
