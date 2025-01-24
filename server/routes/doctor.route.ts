@@ -2,6 +2,8 @@ import { Router } from "express";
 import { authorizeRole, isAuthenticated } from "../middlewares/auth";
 import {
     approveDoctorAccount,
+    getAllDoctors,
+    getAllNotApprovedDoctors,
     requestDoctorAccount,
 } from "../controllers/doctor.controller";
 
@@ -21,6 +23,15 @@ router.post(
     isAuthenticated,
     authorizeRole("admin"),
     approveDoctorAccount
+);
+
+router.get("/get-all", isAuthenticated, getAllDoctors);
+
+router.get(
+    "/get-all-not-approved",
+    isAuthenticated,
+    authorizeRole("admin"),
+    getAllNotApprovedDoctors
 );
 
 export default router;

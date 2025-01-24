@@ -5,6 +5,7 @@ import DoctorModel, { IDoctorOptions } from "../models/doctor.model";
 import NotificationModel from "../models/notification.model";
 import { getReciverSocketId, io } from "../socket/socket";
 
+// create doctor account
 export const requestDoctorAccount = CatchAsyncError(
     async (req: Request, res: Response, next: NextFunction) => {
         try {
@@ -50,6 +51,7 @@ export const requestDoctorAccount = CatchAsyncError(
     }
 );
 
+// approve doctor account for admin
 export const approveDoctorAccount = CatchAsyncError(
     async (req: Request, res: Response, next: NextFunction) => {
         try {
@@ -65,6 +67,12 @@ export const approveDoctorAccount = CatchAsyncError(
 
             if (!dbDoctorAccount) {
                 return next(new ErrorHandler("Doctor account not found!", 404));
+            }
+
+            if (dbDoctorAccount.isApproved === true) {
+                return next(
+                    new ErrorHandler("Doctor account alredy approved.", 400)
+                );
             }
 
             dbDoctorAccount.isApproved = true;
@@ -98,6 +106,47 @@ export const approveDoctorAccount = CatchAsyncError(
             });
         } catch (error: any) {
             console.log("Error in request doctor account : ", error.message);
+            return next(new ErrorHandler(error.message, 500));
+        }
+    }
+);
+
+// get all doctor for user
+export const getAllDoctors = CatchAsyncError(
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const { limit } = req.query;
+
+            const allDoctor = await DoctorModel.find({}).limit(limit as any);
+
+            return res.status(200).json({
+                success: true,
+                doctors: allDoctor,
+            });
+        } catch (error: any) {
+            console.log("Error in get all doctors : ", error.message);
+            return next(new ErrorHandler(error.message, 500));
+        }
+    }
+);
+
+// get all those doctor which are not approved for admin
+export const getAllNotApprovedDoctors = CatchAsyncError(
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const doctors = await DoctorModel.find({
+                isApproved: false,
+            }).sort({
+                createdAt: -1,
+            });
+
+            return res.status(200).json({
+                success: true,
+                doctorsLength: doctors.length,
+                doctors,
+            });
+        } catch (error: any) {
+            console.log("Error in get all not approved : ", error.message);
             return next(new ErrorHandler(error.message, 500));
         }
     }
