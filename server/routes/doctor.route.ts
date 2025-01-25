@@ -10,7 +10,7 @@ import {
 
 const router = Router();
 
-router.get("/test", (req, res) => {
+router.get("/test", isAuthenticated, (req, res) => {
     return res.status(200).json({
         success: true,
         message: "working!",
