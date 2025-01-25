@@ -79,18 +79,21 @@ export const getDoctorNo = CatchAsyncError(
 
             const userId = req.user._id as string;
 
+            let isPatientAlreadyRegistered = false;
+
             dbDoctorPatients.patientInfo.map(
                 (patient: { patientId: string; patientNo: number }) => {
                     if (patient.patientId.toString() === userId.toString()) {
-                        return next(
-                            new ErrorHandler(
-                                "Patient already got a Number.",
-                                400
-                            )
-                        );
+                        isPatientAlreadyRegistered = true;
                     }
                 }
             );
+
+            if (isPatientAlreadyRegistered) {
+                return next(
+                    new ErrorHandler("Patient already registered.", 400)
+                );
+            }
 
             const newPatient = {
                 patientId: req.user._id,
