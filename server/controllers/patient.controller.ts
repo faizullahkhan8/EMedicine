@@ -4,6 +4,8 @@ import ErrorHandler from "../utils/ErrorHandler";
 import mongoose from "mongoose";
 import DoctorModel from "../models/doctor.model";
 import PatientModel from "../models/patient.model";
+import { io, getReciverSocketId } from "../socket/socket";
+import NotificationModel from "../models/notification.model";
 
 export const test = (req: Request, res: Response, next: NextFunction) => {
     return res.status(200).json({
@@ -53,8 +55,6 @@ export const getDoctorNo = CatchAsyncError(
                 );
             }
 
-            // max patient logic goes here.
-
             const dbDoctorPatients = await PatientModel.findOne({
                 doctorId: dbDoctor._id,
             });
@@ -71,10 +71,34 @@ export const getDoctorNo = CatchAsyncError(
                     currentPatient: req.user._id,
                 });
 
+                // DOCTOR NOTIFICATION
+                if (req.user.notification) {
+                    const notification = new NotificationModel({
+                        userId: doctorId,
+                        type: "patient",
+                        message: `You new patient " ${req.user.fullname}. "`,
+                    });
+
+                    const doctorSocketId = getReciverSocketId(doctorId);
+
+                    if (doctorSocketId) {
+                        io.to(doctorSocketId).emit(
+                            "notification",
+                            notification
+                        );
+                    }
+
+                    await notification.save();
+                }
+
                 return res.status(201).json({
                     success: true,
                     message: "You got doctor no successfully",
                 });
+            }
+
+            if (dbDoctor.maxPatients <= dbDoctorPatients.patientInfo.length) {
+                return next(new ErrorHandler("Patients reached maximum", 400));
             }
 
             const userId = req.user._id as string;
@@ -104,7 +128,22 @@ export const getDoctorNo = CatchAsyncError(
 
             await dbDoctorPatients.save({ validateModifiedOnly: true });
 
-            // send notification to the doctor as well as to the patient
+            // DOCTOR NOTIFICATION
+            if (req.user.notification) {
+                const notification = new NotificationModel({
+                    userId: doctorId,
+                    type: "patient",
+                    message: `You new patient " ${req.user.fullname}. "`,
+                });
+
+                const doctorSocketId = getReciverSocketId(doctorId);
+
+                if (doctorSocketId) {
+                    io.to(doctorSocketId).emit("notification", notification);
+                }
+
+                await notification.save();
+            }
 
             return res.status(201).json({
                 success: true,

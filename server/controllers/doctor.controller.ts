@@ -145,7 +145,7 @@ export const getAllNotApprovedDoctors = CatchAsyncError(
                 doctors,
             });
         } catch (error: any) {
-            console.log("Error in get all not approved : ", error.message);
+            console.log("Error in getAllNotApproved : ", error.message);
             return next(new ErrorHandler(error.message, 500));
         }
     }
