@@ -92,8 +92,6 @@ export const approveDoctorAccount = CatchAsyncError(
                     dbDoctorAccount.userAccountId
                 );
 
-                console.log(newNotification);
-
                 if (userSocketId) {
                     io.to(userSocketId).emit("notification", newNotification);
                 }

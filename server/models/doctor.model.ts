@@ -21,7 +21,7 @@ export interface IDoctorOptions extends Document {
         openTime: string; // find the correct data type for the open time
         closeTime: string; // find the correct data type for the close time
         daysInWeek: {
-            nameOfTheDays: string[];
+            nameOfTheDays: number[];
         };
     };
     qualification: {
