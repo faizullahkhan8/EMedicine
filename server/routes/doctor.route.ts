@@ -6,6 +6,7 @@ import {
     getAllDoctors,
     getAllNotApprovedDoctors,
     requestDoctorAccount,
+    setMaxPatients,
 } from "../controllers/doctor.controller";
 
 const router = Router();
@@ -41,5 +42,7 @@ router.put(
     authorizeRole("admin"),
     banDoctor
 );
+
+router.put("/set-max-patients/:doctorId", isAuthenticated, setMaxPatients);
 
 export default router;

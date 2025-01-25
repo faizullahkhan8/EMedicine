@@ -191,3 +191,44 @@ export const banDoctor = CatchAsyncError(
         }
     }
 );
+
+// set no patient for doctor only
+export const setMaxPatients = CatchAsyncError(
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const noOfPatients = req.body.noOfPatients;
+            const doctorId = req.params.doctorId;
+
+            if (noOfPatients <= 0 || !noOfPatients) {
+                return next(
+                    new ErrorHandler(
+                        "No. of patients must be greater than zero.",
+                        400
+                    )
+                );
+            }
+
+            const dbDoctor = await DoctorModel.findById(doctorId);
+
+            if (!dbDoctor) {
+                return next(new ErrorHandler("Doctor not found", 404));
+            }
+
+            if (dbDoctor.maxPatients === noOfPatients) {
+                return next(new ErrorHandler("try different no.", 400));
+            }
+
+            dbDoctor.maxPatients = noOfPatients;
+
+            await dbDoctor?.save({ validateModifiedOnly: true });
+
+            return res.status(201).json({
+                success: true,
+                message: "Number of patients setted successfully.",
+            });
+        } catch (error: any) {
+            console.log("Error in setMaxPatients : ", error.message);
+            return next(new ErrorHandler(error.message, 500));
+        }
+    }
+);

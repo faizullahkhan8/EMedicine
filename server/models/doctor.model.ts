@@ -35,6 +35,7 @@ export interface IDoctorOptions extends Document {
     specialization: string[];
     gender: string;
     messageForPatient: string;
+    maxPatients: number;
     ban: {
         isBanned: boolean;
         reason: string;
@@ -103,6 +104,10 @@ const doctorSchema: Schema<IDoctorOptions> = new Schema(
                     nameOfTheDays: [],
                 },
             },
+        },
+        maxPatients: {
+            type: Number,
+            default: 0,
         },
         qualification: {
             type: [Object],
