@@ -165,7 +165,7 @@ export const getPatientsOfDoctor = CatchAsyncError(
 
             const dbDoctorPatients = await PatientModel.findOne({
                 doctorId: doctorId,
-            }).populate("patientInfo", "patientId");
+            }); //.populate("patientInfo"); search for nested population
 
             if (!dbDoctorPatients) {
                 return next(
@@ -184,6 +184,53 @@ export const getPatientsOfDoctor = CatchAsyncError(
             });
         } catch (error: any) {
             console.log("Error in getPatientsOfDoctor : ", error.message);
+            return next(new ErrorHandler(error.message, 500));
+        }
+    }
+);
+
+// remove patient from patientInfo list
+export const removePatient = CatchAsyncError(
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const doctorId = req.params.doctorId;
+
+            if (!mongoose.Types.ObjectId.isValid(doctorId)) {
+                return next(new ErrorHandler("Invalid doctor ID", 400));
+            }
+
+            const patientId = req.body.patientId;
+
+            if (!patientId) {
+                return next(new ErrorHandler("Missing patient info", 400));
+            }
+
+            const dbDoctorPatients = await PatientModel.findOne({ doctorId });
+
+            if (!dbDoctorPatients) {
+                return next(
+                    new ErrorHandler("Patients document not found", 404)
+                );
+            }
+
+            const requiredPatientIndex = dbDoctorPatients.patientInfo.findIndex(
+                (patient) => patient.patientId.toString() === patientId
+            );
+
+            if (requiredPatientIndex === -1) {
+                return next(new ErrorHandler("Patient not found!", 404));
+            }
+
+            dbDoctorPatients.patientInfo.splice(requiredPatientIndex, 1);
+
+            await dbDoctorPatients.save({ validateModifiedOnly: true });
+
+            return res.status(200).json({
+                success: true,
+                Patien: "Patient removed successfully.",
+            });
+        } catch (error: any) {
+            console.log("Error in removePatient : ", error.message);
             return next(new ErrorHandler(error.message, 500));
         }
     }
