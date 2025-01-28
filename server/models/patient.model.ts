@@ -6,6 +6,7 @@ export interface IPatientOptions extends Document {
         {
             patientId: string;
             patientNo: number;
+            createdAt: Date;
         }
     ];
     currentPatient: mongoose.Types.ObjectId;

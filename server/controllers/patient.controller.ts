@@ -36,12 +36,11 @@ export const getDoctorNo = CatchAsyncError(
             }
 
             // time management logic goes here
-
-            const currentDay = 1; //new Date().getDay();
+            const currentDate = new Date();
             let isDoctorAvailableToday = false;
 
             dbDoctor.timing.daysInWeek.nameOfTheDays.map((day) => {
-                if (currentDay === day) {
+                if (currentDate.getDay() === day) {
                     isDoctorAvailableToday = true;
                 }
             });
@@ -66,6 +65,7 @@ export const getDoctorNo = CatchAsyncError(
                         {
                             patientId: req.user._id,
                             patientNo: 1,
+                            createdAt: currentDate,
                         },
                     ],
                     currentPatient: req.user._id,
@@ -122,7 +122,8 @@ export const getDoctorNo = CatchAsyncError(
             const newPatient = {
                 patientId: req.user._id,
                 patientNo: dbDoctorPatients.patientInfo.length + 1,
-            } as { patientId: string; patientNo: number };
+                createdAt: currentDate,
+            } as { patientId: string; patientNo: number; createdAt: Date };
 
             dbDoctorPatients.patientInfo.push(newPatient);
 
@@ -151,6 +152,38 @@ export const getDoctorNo = CatchAsyncError(
             });
         } catch (error: any) {
             console.log("Error in get doctor no : ", error.message);
+            return next(new ErrorHandler(error.message, 500));
+        }
+    }
+);
+
+// GET PAIENTS OF SPACIFIC DOCTOR
+export const getPatientsOfDoctor = CatchAsyncError(
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const doctorId = req.params.doctorId;
+
+            const dbDoctorPatients = await PatientModel.findOne({
+                doctorId: doctorId,
+            }).populate("patientInfo", "patientId");
+
+            if (!dbDoctorPatients) {
+                return next(
+                    new ErrorHandler("Patients document not found!", 404)
+                );
+            }
+
+            if (dbDoctorPatients.patientInfo.length < 1) {
+                return next(new ErrorHandler("Patients not found!", 404));
+            }
+
+            return res.status(200).json({
+                success: true,
+                PatientsLength: dbDoctorPatients.patientInfo.length,
+                PatientInfo: dbDoctorPatients,
+            });
+        } catch (error: any) {
+            console.log("Error in getPatientsOfDoctor : ", error.message);
             return next(new ErrorHandler(error.message, 500));
         }
     }
