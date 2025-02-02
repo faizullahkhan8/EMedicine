@@ -6,6 +6,7 @@ import DoctorModel from "../models/doctor.model";
 import PatientModel from "../models/patient.model";
 import { io, getReciverSocketId } from "../socket/socket";
 import NotificationModel from "../models/notification.model";
+import UserModel from "../models/user.model";
 
 export const test = (req: Request, res: Response, next: NextFunction) => {
     return res.status(200).json({
@@ -36,11 +37,12 @@ export const getDoctorNo = CatchAsyncError(
             }
 
             // time management logic goes here
-            const currentDate = new Date();
+            const currentDate = 1; //new Date();
             let isDoctorAvailableToday = false;
 
             dbDoctor.timing.daysInWeek.nameOfTheDays.map((day) => {
-                if (currentDate.getDay() === day) {
+                //if (currentDate.getDay() === day) {
+                if (currentDate === day) {
                     isDoctorAvailableToday = true;
                 }
             });
@@ -122,7 +124,7 @@ export const getDoctorNo = CatchAsyncError(
             const newPatient = {
                 patientId: req.user._id,
                 patientNo: dbDoctorPatients.patientInfo.length + 1,
-                createdAt: currentDate,
+                // createdAt: currentDate,
             } as { patientId: string; patientNo: number; createdAt: Date };
 
             dbDoctorPatients.patientInfo.push(newPatient);
@@ -184,6 +186,71 @@ export const getPatientsOfDoctor = CatchAsyncError(
             });
         } catch (error: any) {
             console.log("Error in getPatientsOfDoctor : ", error.message);
+            return next(new ErrorHandler(error.message, 500));
+        }
+    }
+);
+
+export const getIndividualPatients = CatchAsyncError(
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const patientId = req.body.patientId;
+            const doctorId = req.params.doctorId;
+
+            if (!doctorId || !patientId) {
+                return next(
+                    new ErrorHandler("Missing patient or doctor id", 400)
+                );
+            }
+
+            if (
+                !mongoose.Types.ObjectId.isValid(patientId) ||
+                !mongoose.Types.ObjectId.isValid(doctorId)
+            ) {
+                return next(
+                    new ErrorHandler("In-valid patient or doctor id", 400)
+                );
+            }
+
+            const dbDoctorPatients = await PatientModel.findOne({ doctorId });
+
+            if (!dbDoctorPatients) {
+                return next(
+                    new ErrorHandler("Doctor Patients document not found", 404)
+                );
+            }
+
+            const requiredPatientIndex = dbDoctorPatients.patientInfo.findIndex(
+                (patient) => patient.patientId.toString() === patientId
+            );
+
+            if (requiredPatientIndex === -1) {
+                return next(
+                    new ErrorHandler("Patient did'nt got the doctor no.", 404)
+                );
+            }
+
+            const requiredPatientInfo = await UserModel.findById(
+                patientId
+            ).select([
+                "-password",
+                "-searchHistory",
+                "-notification",
+                "-twoFactor",
+                "-completedFields",
+                "-specialty",
+            ]);
+
+            if (!requiredPatientInfo) {
+                return next(new ErrorHandler("Patient does not exists", 404));
+            }
+
+            return res.status(200).json({
+                success: true,
+                Patient: requiredPatientInfo,
+            });
+        } catch (error: any) {
+            console.log("Error in getIndividualPatients : ", error.message);
             return next(new ErrorHandler(error.message, 500));
         }
     }
