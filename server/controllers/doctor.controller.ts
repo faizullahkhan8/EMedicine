@@ -129,6 +129,24 @@ export const getAllDoctors = CatchAsyncError(
     }
 );
 
+// get all doctor for admin only
+export const getAllDoctorsForAdmin = CatchAsyncError(
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const AllDoctorsForAdmin = await DoctorModel.find({});
+
+            return res.status(200).json({
+                success: true,
+                DoctorsLength: AllDoctorsForAdmin.length,
+                Doctors: AllDoctorsForAdmin,
+            });
+        } catch (error: any) {
+            console.log("Error in getAllDoctorForAdmin : ", error.message);
+            return next(new ErrorHandler(error.message, 500));
+        }
+    }
+);
+
 // get all those doctor which are not approved for admin
 export const getAllNotApprovedDoctors = CatchAsyncError(
     async (req: Request, res: Response, next: NextFunction) => {

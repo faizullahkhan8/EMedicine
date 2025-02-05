@@ -4,6 +4,7 @@ import {
     approveDoctorAccount,
     banDoctor,
     getAllDoctors,
+    getAllDoctorsForAdmin,
     getAllNotApprovedDoctors,
     requestDoctorAccount,
     setMaxPatients,
@@ -44,5 +45,11 @@ router.put(
 );
 
 router.put("/set-max-patients/:doctorId", isAuthenticated, setMaxPatients);
+router.get(
+    "/get-all-admin-only",
+    isAuthenticated,
+    authorizeRole("admin"),
+    getAllDoctorsForAdmin
+);
 
 export default router;
