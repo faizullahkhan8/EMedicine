@@ -4,7 +4,6 @@ import {
     approveDoctorAccount,
     banDoctor,
     getAllDoctors,
-    getAllDoctorsForAdmin,
     getAllNotApprovedDoctors,
     requestDoctorAccount,
     setMaxPatients,
@@ -12,15 +11,17 @@ import {
 
 const router = Router();
 
+// Test route to check if the API is working
 router.get("/test", isAuthenticated, (req, res) => {
-    return res.status(200).json({
-        success: true,
-        message: "working!",
-    });
+    return res
+        .status(200)
+        .json({ success: true, message: "API is working correctly!" });
 });
 
+// Request a doctor account (requires authentication)
 router.post("/request-account", isAuthenticated, requestDoctorAccount);
 
+// Approve a doctor's account request (Admin only)
 router.post(
     "/approve-account-request/:accountId",
     isAuthenticated,
@@ -28,8 +29,10 @@ router.post(
     approveDoctorAccount
 );
 
+// Get all approved doctors (Authenticated users)
 router.get("/get-all", isAuthenticated, getAllDoctors);
 
+// Get all non-approved doctors (Admin only)
 router.get(
     "/get-all-not-approved",
     isAuthenticated,
@@ -37,6 +40,7 @@ router.get(
     getAllNotApprovedDoctors
 );
 
+// Ban a doctor (Admin only)
 router.put(
     "/ban/:doctorId",
     isAuthenticated,
@@ -44,12 +48,12 @@ router.put(
     banDoctor
 );
 
-router.put("/set-max-patients/:doctorId", isAuthenticated, setMaxPatients);
-router.get(
-    "/get-all-admin-only",
+// Set maximum number of patients for a doctor (Admin only)
+router.put(
+    "/set-max-patients",
     isAuthenticated,
     authorizeRole("admin"),
-    getAllDoctorsForAdmin
+    setMaxPatients
 );
 
 export default router;
