@@ -1,11 +1,7 @@
 "use client";
-
-import React, { FC } from "react";
 import Heading from "./utils/Heading";
 
-type Props = {};
-
-const Page: FC<Props> = (props) => {
+const Page = () => {
     return (
         <div>
             <Heading
