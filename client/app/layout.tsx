@@ -16,7 +16,7 @@ export default function RootLayout({
         <html lang="en">
             <body className={`antialiased`}>
                 <Navbar />
-                <div className="h-2 shadow-md " />
+                <div className="h-2 shadow-md" />
                 {children}
             </body>
         </html>
