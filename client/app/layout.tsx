@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "./components/Navbar/Navbar";
+import { ThemeProvider } from "next-themes";
+import Footer from "./components/Footer/Footer";
 
 export const metadata: Metadata = {
     title: "Create Next App",
@@ -15,9 +17,15 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className={`antialiased`}>
-                <Navbar />
-                <div className="h-2 shadow-md" />
-                {children}
+                <ThemeProvider
+                    attribute="class"
+                    defaultTheme="system"
+                    enableSystem
+                >
+                    <Navbar />
+                    {children}
+                    <Footer />
+                </ThemeProvider>
             </body>
         </html>
     );

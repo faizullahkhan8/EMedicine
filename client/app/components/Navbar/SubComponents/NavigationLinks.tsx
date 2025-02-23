@@ -20,10 +20,6 @@ const NavigationLinks = () => {
                 header="Labortries"
                 listItems={["Hello", "this", "is", "me"]}
             />
-            <DropDownList
-                header="Top Brands"
-                listItems={["Hello", "this", "is", "me"]}
-            />
         </>
     );
 };

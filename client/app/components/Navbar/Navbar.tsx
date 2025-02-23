@@ -1,12 +1,26 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import NavigationLinks from "./SubComponents/NavigationLinks";
-import { BsFillCartDashFill, BsSearch } from "react-icons/bs";
-import { FiMapPin } from "react-icons/fi";
 import Link from "next/link";
+import SearchInputBox from "./SubComponents/SearchInputBox";
+import { ThemeSwitcher } from "@/app/utils/ThemeSwitcher";
+import { HiOutlineMenuAlt3 } from "react-icons/hi";
+import MobileSideBar from "./SubComponents/MobileSideBar";
 
 const Navbar = () => {
     const [mounted, setMounted] = useState(false);
+    const [navBarStaticActive, setNavBarStaticActive] = useState(false);
+    const [isMobileSideBarActive, setIsMobileSideBarActive] = useState(false);
+
+    if (typeof window !== "undefined") {
+        window.addEventListener("scroll", () => {
+            if (window.scrollY > 80) {
+                setNavBarStaticActive(true);
+            } else {
+                setNavBarStaticActive(false);
+            }
+        });
+    }
 
     useEffect(() => {
         setMounted(true);
@@ -17,55 +31,72 @@ const Navbar = () => {
     }
 
     return (
-        <div className="px-[7rem]">
-            {/* Logo and Login */}
-            <div className="flex gap-4 my-4">
-                <div className="flex items-center justify-center gap-2">
-                    <div>LOGO</div>
-                    <div>EMedicine</div>
-                </div>
-                <div className="flex items-center justify-center gap-2 w-full h-10">
-                    <div className="flex items-center flex-1 gap-2 border border-black rounded-md">
-                        {/* location */}
-                        <div className="flex items-center p-2 justify-center gap-2 border-r pr-4">
-                            <FiMapPin className="text-2xl text-blue-600" />
-                            <p>Bannu</p>
-                        </div>
-                        {/* Search Input */}
-                        <div className="flex w-full items-center gap-2">
-                            <input
-                                type="text"
-                                className="outline-none flex-1 w-full text-lg h-6 placeholder:text-gray-600"
-                                placeholder="Search for Medicines, Wellness, Beauty, Devices and much more... "
-                            />
-                            <div className="bg-blue-600 h-10 rounded-e-md flex items-center justify-center px-2">
-                                <BsSearch className="text-2xl text-white mr-2" />
-                            </div>
+        <div className="w-full relative">
+            <div
+                className={`${
+                    navBarStaticActive
+                        ? "fixed top-0 left-0 w-full h-[80px] z-[80] px-[7rem] max-1000px:px-[5rem] max-800px:px-[3rem] bg-opacity-50"
+                        : "px-[7rem] max-1000px:px-[5rem] max-800px:px-[3rem]"
+                }`}
+            >
+                {/* Logo and Login */}
+                <div className="max-800px:justify-between flex gap-4 py-2 ">
+                    <div className="flex items-center gap-2">
+                        <div className="dark:text-white font-bold">LOGO</div>
+                        <div className="dark:text-white font-bold text-[25px] max-800px:text-[18px]">
+                            EMedicine
                         </div>
                     </div>
-                    {/* Cart Icon */}
+                    <div className="flex items-center justify-center w-full max-800px:justify-end">
+                        <SearchInputBox />
+                        {/* sun and moon icons */}
+                        <ThemeSwitcher />
+                        {/* menu icon only for mobile */}
+                        <HiOutlineMenuAlt3
+                            size={18}
+                            className="cursor-pointer dark:text-white text-black 800px:hidden ml-1"
+                            onClick={() => setIsMobileSideBarActive(true)}
+                        />
+                        {/* Auth Buttons */}
+                        <div className="max-800px:hidden flex items-center justify-center gap-1 h-8 p-2 border dark:border-white border-black rounded-md">
+                            <Link
+                                href="/login"
+                                className="dark:text-white font-semibold text-[14px]"
+                            >
+                                Login
+                            </Link>
+                            <p className="dark:text-white">/</p>
+                            <Link
+                                href="/sign-up"
+                                className="dark:text-white font-semibold text-[14px]"
+                            >
+                                Signup
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+                {/* Links */}
+                <div className="flex items-center justify-between gap-4">
+                    {/* First Link */}
+                    <div className="dark:text-white font-semibold  cursor-pointer text-[16px] max-800px:text-[13px]">
+                        Goto Home
+                    </div>
+                    <div className="max-800px:justify-between 800px:flex items-center justify-center gap-4 hidden">
+                        <NavigationLinks />
+                    </div>
                     <div>
-                        <BsFillCartDashFill className="text-2xl text-blue-600" />
+                        <p className="dark:text-white font-semibold cursor-pointer text-[16px] max-800px:text-[13px]">
+                            Uplaod Your Prescription
+                        </p>
                     </div>
                 </div>
-                {/* Auth Buttons */}
-                <div className="flex items-center justify-center gap-1 h-8 p-2 border border-black rounded-md">
-                    <Link href="#">Login</Link>
-                    <p>/</p>
-                    <Link href="#">Signup</Link>
-                </div>
             </div>
-            {/* Links */}
-            <div className="flex items-center justify-between gap-4">
-                {/* First Link */}
-                <div>Homepage</div>
-                <div className="flex items-center justify-center gap-4">
-                    <NavigationLinks />
-                </div>
-                <div>
-                    <p>Uplaod Your Prescription</p>
-                </div>
-            </div>
+            {/* Mobile Side bar */}
+            {isMobileSideBarActive && (
+                <MobileSideBar
+                    setIsMobileSideBarActive={setIsMobileSideBarActive}
+                />
+            )}
         </div>
     );
 };
