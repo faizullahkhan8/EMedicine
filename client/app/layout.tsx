@@ -16,14 +16,16 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={`antialiased`}>
+            <body
+                className={`antialiased  bg-colors-background flex flex-col min-h-screen`}
+            >
                 <ThemeProvider
                     attribute="class"
                     defaultTheme="system"
                     enableSystem
                 >
                     <Navbar />
-                    {children}
+                    <div className="flex-1 w-full h-full">{children}</div>
                     <Footer />
                 </ThemeProvider>
             </body>

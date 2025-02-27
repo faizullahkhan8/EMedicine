@@ -15,15 +15,15 @@ export const ThemeSwitcher = () => {
         <div className="flex items-center justify-center 800px:mx-2">
             {theme === "light" ? (
                 <BiMoon
-                    className="cursor-pointer"
+                    className="cursor-pointer dark:text-colors-dark"
                     fill="black"
-                    size={18}
+                    size={24}
                     onClick={() => setTheme("dark")}
                 />
             ) : (
                 <BiSun
-                    className="cursor-pointer dark:text-white"
-                    size={18}
+                    className="cursor-pointer dark:text-colors-dark"
+                    size={24}
                     onClick={() => setTheme("light")}
                 />
             )}

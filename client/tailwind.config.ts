@@ -10,8 +10,13 @@ const config: Config = {
     theme: {
         extend: {
             colors: {
-                background: "var(--background)",
-                foreground: "var(--foreground)",
+                colors: {
+                    primary: "#0077b6",
+                    secondary: "#00b4d8",
+                    accent: "#90e0ef",
+                    background: "#caf0f8",
+                    dark: "#03045e",
+                },
             },
             screens: {
                 "1000px": "1000px",

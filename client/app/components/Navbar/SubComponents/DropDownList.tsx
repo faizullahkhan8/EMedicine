@@ -2,7 +2,7 @@ import React, { FC, useState } from "react";
 import { FiChevronDown } from "react-icons/fi";
 
 interface IDropDownListOptions {
-    header: string;
+    header: React.ReactElement;
     listItems: Array<string>;
 }
 
@@ -11,7 +11,7 @@ const DropDownList: FC<IDropDownListOptions> = ({ header, listItems = [] }) => {
         useState<boolean>(false);
     return (
         <div
-            className="relative"
+            className="relative cursor-pointer"
             onMouseEnter={() => {
                 setIsDropdownListOpen(true);
             }}
@@ -20,18 +20,20 @@ const DropDownList: FC<IDropDownListOptions> = ({ header, listItems = [] }) => {
             }}
         >
             <div className="flex items-center justify-center gap-2">
-                <p className="dark:text-white font-semibold hover:cursor-pointer">
-                    {header}
-                </p>
-                <FiChevronDown className="dark:text-white" />
+                {header}
+
+                <FiChevronDown />
             </div>
 
             {isDropdownListOpen && (
-                <div className="absolute rounded dark:border dark:border-white border border-black shadow-md py-2 w-full">
-                    {listItems.map((item) => {
+                <div className="absolute h-auto bg-colors-accent rounded dark:border dark:border-colors-accent border border-black shadow-sm shadow-colors-dark py-2 w-full">
+                    {listItems.map((item, index) => {
                         return (
                             <>
-                                <p className="hover:bg-blue-500 hover:text-white hover:cursor-pointer dark:text-white px-2">
+                                <p
+                                    key={index}
+                                    className="hover:bg-colors-secondary hover:text-white hover:cursor-pointer px-2"
+                                >
                                     {item}
                                 </p>
                             </>
