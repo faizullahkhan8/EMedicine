@@ -62,8 +62,8 @@ const Footer = () => {
                 {/* Links Ends */}
                 <div className="w-full flex items-center justify-between">
                     <div className="flex items-center justify-center gap-2">
-                        <BiCopyright className="dark:text-colors-accent" />
-                        <p className="dark:text-colors-accent">
+                        <BiCopyright className="dark:text-colors-accent text-colors-dark" />
+                        <p className="dark:text-colors-accent text-colors-dark">
                             EMedicine {date.getFullYear()}{" "}
                             <Link
                                 href={""}
@@ -81,16 +81,16 @@ const Footer = () => {
                     </div>
                     <div className="flex items-center justify-center gap-4">
                         <Link href={""}>
-                            <BsFacebook className="dark:text-colors-accent max-800px:text-[16px]" />
+                            <BsFacebook className="text-colors-dark dark:text-colors-accent max-800px:text-[16px]" />
                         </Link>
                         <Link href={""}>
-                            <BsWhatsapp className="dark:text-colors-accent max-800px:text-[16px]" />
+                            <BsWhatsapp className="text-colors-dark dark:text-colors-accent max-800px:text-[16px]" />
                         </Link>
                         <Link href={""}>
-                            <BsInstagram className="dark:text-colors-accent max-800px:text-[16px]" />
+                            <BsInstagram className="text-colors-dark dark:text-colors-accent max-800px:text-[16px]" />
                         </Link>
                         <Link href={""}>
-                            <BsTwitterX className="dark:text-colors-accent max-800px:text-[16px]" />
+                            <BsTwitterX className="text-colors-dark dark:text-colors-accent max-800px:text-[16px]" />
                         </Link>
                     </div>
                 </div>

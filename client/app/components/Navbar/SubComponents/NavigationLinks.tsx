@@ -44,7 +44,7 @@ const NavigationLinks = () => {
                 <DropDownList
                     key={link.header}
                     header={
-                        <span className="truncate h-full w-full text-ellipsis">
+                        <span className="dark:text-white text-colors-dark truncate h-full w-full text-ellipsis">
                             {link.header}
                         </span>
                     }
@@ -54,7 +54,7 @@ const NavigationLinks = () => {
 
             {/* "See All Categories" always remains visible unless screen is < 800px */}
             {window.innerWidth > 800 && (
-                <div className="flex items-center justify-center gap-2">
+                <div className="dark:text-white text-colors-dark flex items-center justify-center gap-2">
                     All Categories
                     <FiArrowRight className="dark:text-colors-dark font-[18px]" />
                 </div>

@@ -25,7 +25,9 @@ export default function RootLayout({
                     enableSystem
                 >
                     <Navbar />
-                    <div className="flex-1 w-full h-full">{children}</div>
+                    <div className="flex-1 w-full h-full dark:bg-black">
+                        {children}
+                    </div>
                     <Footer />
                 </ThemeProvider>
             </body>

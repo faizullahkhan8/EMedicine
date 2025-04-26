@@ -33,14 +33,14 @@ const FooterLinks = () => {
     return (
         <div className="w-full flex items-start justify-start gap-8 py-4 flex-wrap ">
             <div className="flex flex-col items-start">
-                <h2 className="font-semibold text-[20px] text-colors-primary py-2">
+                <h2 className="font-semibold text-[20px] dark:text-white text-colors-primary py-2">
                     Company
                 </h2>
                 <div className="w-full flex justify-start flex-col">
                     {ColumnOneLinks.map((link, index) => {
                         return (
                             <Link
-                                className="opacity-80 hover:opacity-100 text-[14px] dark:text-colors-accent"
+                                className="opacity-80 hover:opacity-100 text-[14px] text-colors-dark dark:text-colors-accent"
                                 key={index}
                                 href={link.href}
                             >
@@ -51,14 +51,14 @@ const FooterLinks = () => {
                 </div>
             </div>
             <div className="flex flex-col items-start">
-                <h2 className="font-semibold text-[20px] text-colors-primary py-2">
+                <h2 className="font-semibold text-[20px] dark:text-white text-colors-primary py-2">
                     Top Specialists
                 </h2>
                 <div className="w-full flex justify-start flex-col">
                     {ColumnTwoLinks.map((link, index) => {
                         return (
                             <Link
-                                className="opacity-80 hover:opacity-100 text-[14px] dark:text-colors-accent"
+                                className="opacity-80 hover:opacity-100 text-[14px] text-colors-dark dark:text-colors-accent"
                                 key={index}
                                 href={link.href}
                             >
@@ -69,14 +69,14 @@ const FooterLinks = () => {
                 </div>
             </div>
             <div className="flex flex-col items-start">
-                <h2 className="font-semibold text-[20px] text-colors-primary py-2">
+                <h2 className="font-semibold text-[20px] dark:text-white text-colors-primary py-2">
                     Resources
                 </h2>
                 <div className="w-full flex justify-start flex-col">
                     {ColumnThreeLinks.map((link, index) => {
                         return (
                             <Link
-                                className="opacity-80 hover:opacity-100 text-[14px] dark:text-colors-accent"
+                                className="opacity-80 hover:opacity-100 text-[14px] text-colors-dark dark:text-colors-accent"
                                 key={index}
                                 href={link.href}
                             >

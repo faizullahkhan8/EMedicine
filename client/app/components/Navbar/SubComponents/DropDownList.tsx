@@ -21,18 +21,17 @@ const DropDownList: FC<IDropDownListOptions> = ({ header, listItems = [] }) => {
         >
             <div className="flex items-center justify-center gap-2">
                 {header}
-
-                <FiChevronDown />
+                <FiChevronDown className="dark:text-white text-colors-dark" />
             </div>
 
             {isDropdownListOpen && (
-                <div className="absolute h-auto bg-colors-accent rounded dark:border dark:border-colors-accent border border-black shadow-sm shadow-colors-dark py-2 w-full">
+                <div className="absolute h-auto dark:bg-colors-dark bg-colors-accent rounded dark:border dark:border-colors-accent border border-black shadow-sm shadow-colors-dark py-2 w-full">
                     {listItems.map((item, index) => {
                         return (
                             <>
                                 <p
                                     key={index}
-                                    className="hover:bg-colors-secondary hover:text-white hover:cursor-pointer px-2"
+                                    className="dark:text-white text-colors-dark hover:bg-colors-secondary hover:text-white hover:cursor-pointer px-2"
                                 >
                                     {item}
                                 </p>

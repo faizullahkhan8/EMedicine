@@ -37,7 +37,7 @@ const Navbar = () => {
     return (
         <div className="w-full relative">
             <div
-                className={`bg-colors-accent pb-2 ${
+                className={`dark:bg-colors-dark bg-colors-accent pb-2 ${
                     navBarStaticActive
                         ? "fixed top-0 left-0 w-full z-[80] px-[7rem] max-1000px:px-[5rem] max-800px:px-[3rem]"
                         : "px-[7rem] max-1000px:px-[5rem] max-800px:px-[3rem] "
@@ -68,17 +68,19 @@ const Navbar = () => {
                                 className="w-10 h-9 rounded-full bg-colors-primary max-800px:hidden"
                             ></Link>
                         ) : (
-                            <div className="max-800px:hidden flex items-center justify-center gap-1 h-8 p-2 border  border-black rounded-md">
+                            <div className="max-800px:hidden flex items-center justify-center gap-1 h-10 p-2 border dark:border-colors-primary  border-black rounded-md">
                                 <Link
                                     href="/login"
-                                    className="font-semibold text-[14px]"
+                                    className="dark:text-white text-colors-dark font-semibold text-[14px]"
                                 >
                                     Login
                                 </Link>
-                                <p>/</p>
+                                <p className="dark:text-white text-colors-dark">
+                                    /
+                                </p>
                                 <Link
                                     href="/sign-up"
-                                    className="font-semibold text-[14px]"
+                                    className="dark:text-white text-colors-dark font-semibold text-[14px]"
                                 >
                                     Signup
                                 </Link>
@@ -89,14 +91,14 @@ const Navbar = () => {
                 {/* Links */}
                 <div className="flex items-center justify-between gap-4">
                     {/* First Link */}
-                    <div className="font-semibold cursor-pointer text-[16px] max-800px:text-[13px]">
+                    <div className="dark:text-white text-colors-dark font-semibold cursor-pointer text-[16px] max-800px:text-[13px]">
                         Goto Home
                     </div>
                     <div className="max-800px:justify-between 800px:flex items-center justify-center gap-4 hidden">
                         <NavigationLinks />
                     </div>
                     <div>
-                        <p className="font-semibold cursor-pointer text-[16px] max-800px:text-[13px] ">
+                        <p className="dark:text-white text-colors-dark font-semibold cursor-pointer text-[16px] max-800px:text-[13px] ">
                             Uplaod Your Prescription
                         </p>
                     </div>
