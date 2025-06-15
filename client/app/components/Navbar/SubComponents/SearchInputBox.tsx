@@ -1,5 +1,4 @@
 import React from "react";
-import { BsFillCartDashFill } from "react-icons/bs";
 import { MdSearch } from "react-icons/md";
 import { BsPinMapFill } from "react-icons/bs";
 
@@ -26,10 +25,6 @@ const SearchInputBox = () => {
                             <MdSearch className="text-[28px] text-[#fff]" />
                         </div>
                     </div>
-                </div>
-                {/* Cart Icon */}
-                <div>
-                    <BsFillCartDashFill className="text-[24px] dark:text-white text-colors-dark hover:cursor-pointer" />
                 </div>
             </div>
         </>

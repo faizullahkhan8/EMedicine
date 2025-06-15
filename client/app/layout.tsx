@@ -17,7 +17,7 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body
-                className={`antialiased  bg-colors-background flex flex-col min-h-screen`}
+                className={`antialiased !bg-[#868db44c] bg-no-repeat dark:bg-gradient-to-b dark:from-gray-900 dark:to-black duration-300 flex flex-col min-h-screen`}
             >
                 <ThemeProvider
                     attribute="class"
@@ -25,9 +25,7 @@ export default function RootLayout({
                     enableSystem
                 >
                     <Navbar />
-                    <div className="flex-1 w-full h-full dark:bg-black">
-                        {children}
-                    </div>
+                    <div className="flex-1 w-full h-full">{children}</div>
                     <Footer />
                 </ThemeProvider>
             </body>

@@ -27,7 +27,7 @@ const MobileSideBar = ({
         >
             {/* Sidebar */}
             <div
-                className={`w-[70%] fixed z-[9999] h-screen shadow-md rounded-tl-md rounded-bl-md bg-colors-accent dark:bg-slate-900 dark:bg-opacity-90 top-0 right-0 px-4 overflow-x-scroll scroll-smooth transition-all duration-300 transform ${
+                className={`w-[70%] fixed z-[9999] h-screen shadow-md rounded-tl-md rounded-bl-md bg-colors-background dark:bg-slate-900 bg-opacity-90 top-0 right-0 px-4 overflow-x-scroll scroll-smooth transition-transform duration-300 transform ${
                     isMobileSideBarActive
                         ? "translate-x-0 opacity-100"
                         : "translate-x-full opacity-0"

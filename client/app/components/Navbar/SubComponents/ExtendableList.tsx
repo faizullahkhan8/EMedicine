@@ -37,7 +37,7 @@ const ExtendableList = ({ header, listItems }: ExtendableListOptions) => {
                 {listItems.map((item, index) => (
                     <p
                         key={index}
-                        className="pl-6 text-[13px] hover:bg-blue-500 hover:text-white hover:cursor-pointer dark:text-white px-2 py-1"
+                        className="pl-6 text-[13px] hover:bg-blue-500 dark:text-white hover:cursor-pointer text-black px-2 py-1"
                     >
                         {item}
                     </p>

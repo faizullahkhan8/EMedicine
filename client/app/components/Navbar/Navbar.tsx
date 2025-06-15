@@ -7,6 +7,7 @@ import SearchInputBox from "./SubComponents/SearchInputBox";
 import { ThemeSwitcher } from "@/app/utils/ThemeSwitcher";
 import { HiOutlineMenuAlt3 } from "react-icons/hi";
 import MobileSideBar from "./SubComponents/MobileSideBar";
+import { BsFillCartDashFill } from "react-icons/bs";
 
 const Navbar = () => {
     const [mounted, setMounted] = useState(false);
@@ -39,7 +40,7 @@ const Navbar = () => {
             <div
                 className={`dark:bg-colors-dark bg-colors-accent pb-2 ${
                     navBarStaticActive
-                        ? "fixed top-0 left-0 w-full z-[80] px-[7rem] max-1000px:px-[5rem] max-800px:px-[3rem]"
+                        ? "fixed top-0 left-0 w-full z-[80] px-[7rem] max-1000px:px-[5rem] max-800px:px-[3rem] bg-opacity-90"
                         : "px-[7rem] max-1000px:px-[5rem] max-800px:px-[3rem] "
                 }`}
             >
@@ -53,12 +54,19 @@ const Navbar = () => {
                     </Link>
                     <div className="flex items-center justify-center w-full max-800px:justify-end">
                         <SearchInputBox />
+                        {/* Cart Icon */}
+                        <Link href="/cart" className="mx-2 relative">
+                            <BsFillCartDashFill className="text-[24px] dark:text-white text-colors-dark hover:cursor-pointer" />
+                            <span className="w-4 h-4 flex items-center justify-center absolute top-[-8px] right-[-5px] rounded-full bg-red-600 text-white text-[12px]">
+                                2
+                            </span>
+                        </Link>
                         {/* sun and moon icons */}
                         <ThemeSwitcher />
                         {/* menu icon only for mobile */}
                         <HiOutlineMenuAlt3
                             size={24}
-                            className="cursor-pointer text-colors-dark 800px:hidden ml-1"
+                            className="cursor-pointer dark:text-white text-colors-dark 800px:hidden ml-1"
                             onClick={() => setIsMobileSideBarActive(true)}
                         />
                         {/* Auth Buttons */}

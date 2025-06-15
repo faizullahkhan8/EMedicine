@@ -10,12 +10,19 @@ const config: Config = {
     theme: {
         extend: {
             colors: {
+                backgroundImage: {
+                    "gradient-radial":
+                        "radial-gradient(var(--tw-gradient-stops))",
+                    "gradient-conic":
+                        "conic-gradient(from 180def at 50% 50%, var(--tw-gradient-stops))",
+                },
                 colors: {
                     primary: "#0077b6",
                     secondary: "#00b4d8",
                     accent: "#90e0ef",
                     background: "#caf0f8",
                     dark: "#03045e",
+                    mainBackground: "#868db44c",
                 },
             },
             screens: {

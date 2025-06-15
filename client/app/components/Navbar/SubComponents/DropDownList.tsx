@@ -28,14 +28,12 @@ const DropDownList: FC<IDropDownListOptions> = ({ header, listItems = [] }) => {
                 <div className="absolute h-auto dark:bg-colors-dark bg-colors-accent rounded dark:border dark:border-colors-accent border border-black shadow-sm shadow-colors-dark py-2 w-full">
                     {listItems.map((item, index) => {
                         return (
-                            <>
-                                <p
-                                    key={index}
-                                    className="dark:text-white text-colors-dark hover:bg-colors-secondary hover:text-white hover:cursor-pointer px-2"
-                                >
-                                    {item}
-                                </p>
-                            </>
+                            <p
+                                key={index}
+                                className="dark:text-white text-colors-dark hover:bg-colors-secondary hover:text-white hover:cursor-pointer px-2"
+                            >
+                                {item}
+                            </p>
                         );
                     })}
                 </div>
