@@ -26,7 +26,7 @@ const Footer = () => {
                     <div className="flex items-center justify-center gap-2">
                         <div className="flex items-center justify-center gap-2 border dark:border-colors-accent border-colors-dark rounded-md p-1 bg-colors-secondary">
                             <div>
-                                <BiLogoAndroid className="text-colors-dark text-[24px]" />
+                                <BiLogoAndroid className="text-colors-dark text-[24px] max-400px:hidden" />
                             </div>
                             <div>
                                 <p className="text-colors-dark text-[12px]">
@@ -41,7 +41,7 @@ const Footer = () => {
                             <div>
                                 <BiLogoApple
                                     size={24}
-                                    className="text-colors-dark text-[24px]"
+                                    className="text-colors-dark text-[24px] max-400px:hidden"
                                 />
                             </div>
                             <div>

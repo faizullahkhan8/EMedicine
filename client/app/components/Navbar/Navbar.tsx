@@ -40,7 +40,7 @@ const Navbar = () => {
             <div
                 className={`dark:bg-colors-dark bg-colors-accent pb-2 ${
                     navBarStaticActive
-                        ? "fixed top-0 left-0 w-full z-[80] px-[7rem] max-1000px:px-[5rem] max-800px:px-[3rem] bg-opacity-90"
+                        ? "fixed top-0 left-0 w-full z-[9999] px-[7rem] max-1000px:px-[5rem] max-800px:px-[3rem] bg-opacity-90"
                         : "px-[7rem] max-1000px:px-[5rem] max-800px:px-[3rem] "
                 }`}
             >

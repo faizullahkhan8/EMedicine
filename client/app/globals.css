@@ -125,3 +125,21 @@ body {
 .shake {
     animation: shake 0.5s ease-in-out;
 }
+
+/* Slick Carousel Styles */
+.slick-slider {
+    width: 100%;
+    margin: auto;
+}
+
+.slick-dots {
+    bottom: -30px;
+}
+
+.slick-dots li button:before {
+    color: #868db4;
+}
+
+.slick-dots li.slick-active button:before {
+    color: #03045e;
+}
