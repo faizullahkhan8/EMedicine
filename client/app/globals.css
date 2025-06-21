@@ -143,3 +143,39 @@ body {
 .slick-dots li.slick-active button:before {
     color: #03045e;
 }
+
+/* Override Swiper navigation button styles */
+.swiper-button-next,
+.swiper-button-prev {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    color: #fff !important; /* Change arrow color */
+    background: rgba(0, 0, 0, 0.5); /* Add background */
+    border-radius: 50%; /* Make buttons round */
+    width: 50px !important;
+    height: 50px !important;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+    background: skyblue; /* Change background on hover */
+    color: #000 !important;
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+    font-size: 20px !important; /* Change arrow size */
+}
+
+.hide-scrollbar-mobile {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+.hide-scrollbar-mobile::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}

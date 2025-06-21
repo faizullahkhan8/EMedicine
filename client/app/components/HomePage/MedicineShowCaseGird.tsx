@@ -1,5 +1,4 @@
 import React, { FC } from "react";
-import sample_pic from "@/public/sample_pic.jpeg";
 import Image from "next/image";
 import Link from "next/link";
 import { MdKeyboardArrowRight } from "react-icons/md";
@@ -57,7 +56,9 @@ const MedicineShowCaseGird: FC<IMedicineShowCaseGirdOptions> = ({
                         <div className="flex gap-2 flex-col">
                             <div className="w-full h-full">
                                 <Image
-                                    src={sample_pic}
+                                    src={topOneItem.imageUrl}
+                                    width={500}
+                                    height={500}
                                     alt="sample_medicine"
                                     className="rounded-lg w-full object-contain"
                                 />
@@ -96,7 +97,9 @@ const MedicineShowCaseGird: FC<IMedicineShowCaseGirdOptions> = ({
                                 <div>
                                     <div>
                                         <Image
-                                            src={sample_pic}
+                                            src={item.imageUrl}
+                                            width={500}
+                                            height={500}
                                             alt="sample_medicine"
                                             className="rounded w-full object-contain"
                                         />
