@@ -7,7 +7,7 @@ import Link from "next/link";
 import { AiOutlineMinusSquare, AiOutlinePlusSquare } from "react-icons/ai";
 import { BsTrash } from "react-icons/bs";
 
-import tempImage from "@/public/images/SurbexZ_pic.jpeg";
+import tempImage from "@/public/images/SurbexZ_pic.png";
 import Image from "next/image";
 
 interface IOrderdMedicineOptions {
@@ -25,14 +25,14 @@ const Page = () => {
     const [orderedMedicines, setOrderedMedicines] = useState<
         Array<IOrderdMedicineOptions>
     >([
-        // {
-        //     medicineName: "Burofen",
-        //     medicineDescription:
-        //         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem inventore officia, nostrum est maxime.",
-        //     medicinePictureUrl: "someelse",
-        //     packPrice: 130,
-        //     packQuantity: 2,
-        // },
+        {
+            medicineName: "Surbex-Z",
+            medicineDescription:
+                "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem inventore officia, nostrum est maxime.",
+            medicinePictureUrl: "someelse",
+            packPrice: 130,
+            packQuantity: 2,
+        },
     ]);
 
     const handleMedicineQuntityChange = (

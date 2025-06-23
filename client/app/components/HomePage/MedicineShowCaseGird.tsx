@@ -60,7 +60,7 @@ const MedicineShowCaseGird: FC<IMedicineShowCaseGirdOptions> = ({
                                 />
                             </div>
                             <div className="p-2">
-                                <h2 className="font-[500] text-[22px] font-mono dark:text-white">
+                                <h2 className="font-bold text-[22px] dark:text-white">
                                     {topOneItem.title}
                                 </h2>
                                 <p className="text-sm text-gray-800 mt-1 text-[18px] dark:text-white">
@@ -105,11 +105,11 @@ const MedicineShowCaseGird: FC<IMedicineShowCaseGirdOptions> = ({
                                         />
                                     </div>
                                     <div className="p-2">
-                                        <h4 className="max-800px:text-[14px] mt-2">
+                                        <h4 className="max-800px:text-[14px] mt-2 font-bold">
                                             {item.title.toUpperCase()}
                                         </h4>
                                         <div className="flex justify-start gap-3">
-                                            <p className="text-[14px] max-800px:text-[12px] mt-1">
+                                            <p className="text-[14px] font-semibold max-800px:text-[12px] mt-1">
                                                 <span className="mr-2">
                                                     {item.price.toFixed(2)}
                                                 </span>
