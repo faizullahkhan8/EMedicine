@@ -7,7 +7,7 @@ import Link from "next/link";
 import { AiOutlineMinusSquare, AiOutlinePlusSquare } from "react-icons/ai";
 import { BsTrash } from "react-icons/bs";
 
-import tempImage from "@/public/sample_pic.jpeg";
+import tempImage from "@/public/images/SurbexZ_pic.jpeg";
 import Image from "next/image";
 
 interface IOrderdMedicineOptions {
@@ -25,30 +25,14 @@ const Page = () => {
     const [orderedMedicines, setOrderedMedicines] = useState<
         Array<IOrderdMedicineOptions>
     >([
-        {
-            medicineName: "Burofen",
-            medicineDescription:
-                "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem inventore officia, nostrum est maxime.",
-            medicinePictureUrl: "someelse",
-            packPrice: 130,
-            packQuantity: 2,
-        },
-        {
-            medicineName: "Acefyl",
-            medicineDescription:
-                "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem inventore officia, nostrum est maxime.",
-            medicinePictureUrl: "something else",
-            packPrice: 160,
-            packQuantity: 3,
-        },
-        {
-            medicineName: "Pulmonol",
-            medicineDescription:
-                "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem inventore officia, nostrum est maxime.",
-            medicinePictureUrl: "something else",
-            packPrice: 200,
-            packQuantity: 3,
-        },
+        // {
+        //     medicineName: "Burofen",
+        //     medicineDescription:
+        //         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem inventore officia, nostrum est maxime.",
+        //     medicinePictureUrl: "someelse",
+        //     packPrice: 130,
+        //     packQuantity: 2,
+        // },
     ]);
 
     const handleMedicineQuntityChange = (
@@ -122,7 +106,7 @@ const Page = () => {
                 </div>
 
                 {orderedMedicines.length > 0 ? (
-                    <div className="w-full bg-white dark:bg-transparent border border-transparent dark:border-gray-600 rounded px-4 py-2">
+                    <div className="w-full bg-colors-mainBackground border rounded-md shadow-md px-4 py-2">
                         <h1 className="text-[22px] font-semibold text-black dark:text-white">
                             Medicines & Other Products :{" "}
                             {orderedMedicines.length} items
@@ -131,9 +115,9 @@ const Page = () => {
                         {orderedMedicines.map((item, index) => (
                             <div key={index}>
                                 {/* upper section */}
-                                <div className="flex w-full max-800px:flex-col-reverse">
+                                <div className="flex w-full max-800px:flex-col-reverse rounded-md shadow-md p-2 border">
                                     {/* pic + name + description */}
-                                    <div className="w-full flex flex-[3] gap-2">
+                                    <div className="w-full flex flex-[3] gap-2 max-1000px:flex-col">
                                         <div className="w-full h-[10rem] bg-green-600 rounded-md">
                                             <Image
                                                 src={tempImage}
@@ -145,7 +129,7 @@ const Page = () => {
                                             <h2 className="font-semibold text-[22px] text-colors-dark dark:text-colors-accent">
                                                 {item.medicineName}
                                             </h2>
-                                            <p className="">
+                                            <p className="text-colors-dark dark:text-colors-accent">
                                                 {item.medicineDescription}
                                             </p>
                                         </div>
@@ -155,16 +139,16 @@ const Page = () => {
                                             onClick={() => {
                                                 handleRemoveMedicine(index);
                                             }}
-                                            className="w-full flex cursor-pointer items-center justify-center py-1 dark:hover:text-white rounded-lg border border-black hover:border-transparent transition-colors duration-300  text-red-600 hover:text-white hover:bg-red-600 text-center font-medium"
+                                            className="w-full flex cursor-pointer items-center justify-center py-1 rounded-md border transition-shadow  hover:shadow-red-600 shadow-md text-red-600 text-center font-medium"
                                         >
                                             <BsTrash className="text-[18px]" />
                                         </div>
-                                        <p className="max-800px:hidden w-full p-1 rounded-lg border border-gray-600 transition-colors duration-300 text-black text-center font-medium bg-transparent  dark:text-white">
+                                        <p className="max-800px:hidden w-full py-[2px] rounded-md border text-black text-center font-medium shadow-md">
                                             Quantity
                                         </p>
                                         <div className="flex items-center justify-around w-full ">
                                             <AiOutlineMinusSquare
-                                                className="text-[22px] hover:text-red-600 cursor-pointer"
+                                                className="text-[22px] hover:text-red-600 transition-colors duration-300 cursor-pointer"
                                                 onClick={(e: any) => {
                                                     handleMedicineQuntityChange(
                                                         false,
@@ -176,7 +160,7 @@ const Page = () => {
                                             <input
                                                 type="number"
                                                 value={item.packQuantity}
-                                                className="w-5 border rounded text-center dark:text-white text-black"
+                                                className="w-5 border rounded-md bg-colors-mainBackground text-center dark:text-white text-black shadow-md"
                                                 onChange={(e) => {
                                                     if (
                                                         orderedMedicines[index]
@@ -203,7 +187,7 @@ const Page = () => {
                                                 }}
                                             />
                                             <AiOutlinePlusSquare
-                                                className="text-[22px] hover:text-green-600 cursor-pointer"
+                                                className="text-[22px] hover:text-green-600 cursor-pointer transition-colors duration-300"
                                                 onClick={(e: any) => {
                                                     handleMedicineQuntityChange(
                                                         true,
@@ -247,11 +231,11 @@ const Page = () => {
                 ) : (
                     // if there is no medicines ordered
                     <div className="w-full flex items-center justify-center flex-col gap-2">
-                        <IoIosCart className="w-[40%] h-full" />
+                        <IoIosCart className="w-[40%] h-full text-colors-mainBackground drop-shadow-md shadow-black" />
                         <p>No medicine added to the cart yet</p>
                         <Link
                             href={"#"}
-                            className="border rounded-lg border-black px-2 py-1 hover:bg-[#03045e] hover:text-white font-semibold"
+                            className="border rounded-md shadow-md px-2 py-1 font-semibold hover:shadow-colors-secondary transition-shadow duration-300"
                         >
                             Add Medicine Now
                         </Link>
@@ -259,8 +243,8 @@ const Page = () => {
                 )}
             </div>
             {/* right side */}
-            <div className="bg-[#868db496] w-full h-full rounded flex flex-col gap-1">
-                <div className="flex flex-col bg-[#868db44c] p-3 ">
+            <div className="w-full h-full rounded-md flex flex-col gap-2">
+                <div className="flex flex-col bg-[#868db44c] p-3 rounded-md shadow-md border dark:border-transparent hover:scale-[1.01] transition-transform duration-300">
                     <div>
                         <h2 className="py-4 text-colors-dark font-bold dark:text-white">
                             Summary
@@ -271,31 +255,31 @@ const Page = () => {
                         <p>Rs: {calculateSubTotal().toFixed(2)}</p>
                     </div>
                 </div>
-                <div>
-                    <div className="flex items-center justify-between bg-[#868db44c] p-3">
+                <div className="rounded-md shadow-md border dark:border-transparent hover:scale-[1.01] transition-transform duration-300">
+                    <div className="flex items-center justify-between bg-[#868db44c] p-3 rounded-t-md">
                         <p>Discount Applied</p>
                         <p>
                             {discount}% : {calculateDicount().toFixed(2)}
                         </p>
                     </div>
-                    <div className="flex items-center justify-between bg-[#868db44c] p-3">
+                    <div className="flex items-center justify-between bg-[#868db44c] p-3 rounded-b-md">
                         <p>Platform Fee</p>
                         {/* platform fee will dynamic, setted by the admin from the dashboard */}
                         <p>Rs: {platformFee}</p>
                     </div>
                 </div>
-                <div className="flex items-center justify-between bg-[#868db44c] p-3">
+                <div className="flex items-center justify-between bg-[#868db44c] p-3 rounded-md shadow-md border dark:border-transparent hover:scale-[1.01] transition-transform duration-300">
                     <p>Deliver Charges</p>
                     {/* Delivery charges will be based on location */}
                     <p>Rs: {deliveryCharges}</p>
                 </div>
-                <div className="flex gap-4 flex-col bg-[#868db44c] p-3">
+                <div className="flex gap-4 flex-col bg-[#868db44c] p-3 rounded-md shadow-md border dark:border-transparent hover:scale-[1.01] transition-transform duration-300">
                     <div className="flex items-center justify-between">
                         <p>Grand Total</p>
                         <p>Rs: {calculateGrandTotal().toFixed(2)}</p>
                     </div>
                     <div className="w-full">
-                        <button className="w-full py-1 rounded-lg border border-transparent transition-colors duration-300 bg-colors-dark hover:bg-[#03055ed8] text-white font-medium dark:text-black dark:bg-colors-accent">
+                        <button className="w-full py-1 rounded-md shadow-md border dark:border-transparent transition-colors duration-300 font-medium dark:bg-colors-mainBackground">
                             Review Order
                         </button>
                     </div>

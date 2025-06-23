@@ -5,7 +5,7 @@ import { MdHelp } from "react-icons/md";
 const NeedHelp = () => {
     return (
         <div className="w-full flex items-center justify-center py-2">
-            <div className="w-[30%] max-800px:w-[80%] max-1000px:w-[40%] flex items-center justify-center my-2 border dark:bg-transparent bg-colors-accent rounded shadow-lg gap-2">
+            <div className="w-[30%] max-800px:w-[80%] max-1000px:w-[40%] flex items-center justify-center my-2 border dark:border-transparent bg-colors-mainBackground rounded-md shadow-md gap-2">
                 <div className="max-800px:w-[20rem] w-[10rem] flex items-center justify-center">
                     <MdHelp
                         size={100}
@@ -25,7 +25,7 @@ const NeedHelp = () => {
                                 We provide 24 / 7 support to assist to problems.
                             </p>
                         </div>
-                        <div className="border border-colors-dark place-self-start p-2 rounded hover:bg-colors-secondary hover:text-white ">
+                        <div className="border dark:border-none dark:bg-colors-mainBackground hover:shadow-md transition-shadow duration-300 place-self-start p-2 rounded-md hover:text-white ">
                             <Link href={""}>
                                 <p className="text-[14px] font-semibold dark:text-white text-colors-dark">
                                     Call 033xxxxxxxx

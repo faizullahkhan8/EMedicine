@@ -13,7 +13,7 @@ const ExtendableList = ({ header, listItems }: ExtendableListOptions) => {
         <div className="relative w-full">
             {/* Header (Clickable) */}
             <div
-                className="flex items-center justify-between gap-2 hover:cursor-pointer w-full text-gray-600 hover:text-gray-900"
+                className="flex items-center justify-between gap-2 hover:cursor-pointer w-full text-colors-dark"
                 onClick={() => setIsExtendableListOpen((prev) => !prev)}
             >
                 <p className="dark:text-white font-semibold text-[14px]">

@@ -4,11 +4,14 @@ import Heading from "./utils/Heading";
 import Carosoul from "./components/HomePage/Carosuol";
 import ImageSlider from "./components/HomePage/ImageSlider";
 import TwoSections from "./components/HomePage/TwoSections";
+import MissionStatement from "./components/HomePage/MissionStatement";
 import {
     ImagesForCarosoul,
     ImagesForSlider,
+    MedicineArrayForShowCase,
     TwoSectionsData,
 } from "./utils/RandomData";
+import MedicineShowCaseGird from "./components/HomePage/MedicineShowCaseGird";
 
 const Page = () => {
     return (
@@ -23,6 +26,12 @@ const Page = () => {
                 <TwoSections
                     TopTitle="How Can We Helps?"
                     items={TwoSectionsData}
+                />
+                <MissionStatement />
+                <MedicineShowCaseGird
+                    Title="Wide Range of Medicines"
+                    Items={MedicineArrayForShowCase}
+                    MiniTitle="PHARMACY"
                 />
                 <ImageSlider
                     title="Top Selling products"

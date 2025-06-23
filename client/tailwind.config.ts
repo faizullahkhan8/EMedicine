@@ -21,9 +21,12 @@ const config: Config = {
                     secondary: "#00b4d8",
                     accent: "#90e0ef",
                     background: "#caf0f8",
-                    dark: "#03045e",
+                    dark: "#1C1F26", //"#03045e",
                     mainBackground: "#868db44c",
                 },
+            },
+            fontFamily: {
+                Poppins: ["Poppins"],
             },
             screens: {
                 "1000px": "1000px",

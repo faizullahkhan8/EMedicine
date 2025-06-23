@@ -1,7 +1,7 @@
 "use client";
 import NeedHelp from "@/app/utils/NeedHelp";
-import Link from "next/link";
 import React, { useRef, useState } from "react";
+import { BiSolidError } from "react-icons/bi";
 
 interface IVerificationNumber {
     "0": string;
@@ -42,12 +42,12 @@ const Verification = () => {
     return (
         <div>
             <div className="w-full flex items-center justify-center flex-col my-4 px-[7rem] max-1000px:px-[5rem] max-800px:px-[3rem]">
-                <div className="w-full flex flex-col gap-4 border shadow-sm dark:shadow-colors-accent border-colors-accent rounded px-8 800px:pr-[8rem]   bg-colors-accent dark:bg-black py-4">
+                <div className="w-[70%] max-800px:w-full flex flex-col gap-4 border dark:border-transparent shadow-md rounded-md px-8 800px:pr-[8rem] bg-colors-mainBackground py-4">
                     <div>
-                        <p className="text-colors-dark dark:text-white  font-semibold text-[24px] mb-2">
+                        <p className="text-colors-dark dark:text-white  font-semibold max-800px:text-[18px] text-[24px] mb-2">
                             Register for Free
                         </p>
-                        <p className="text-colors-dark dark:text-white">
+                        <p className="text-colors-dark dark:text-white text-[16px] max-800px:text-[14px]">
                             Lorem ipsum dolor sit amet consectetur, adipisicing
                             elit. Incidunt sunt, ipsum aliquid ducimus dolore
                             exercitationem corporis, atque quia eaque ea dolores
@@ -61,7 +61,7 @@ const Verification = () => {
                                 type="number"
                                 key={key}
                                 ref={inputRefs[index]}
-                                className={`w-[50px] h-[50px] bg-transparent border-[1px] rounded-[10px] flex items-center text-black dark:text-white justify-center text-[18px] font-Poppins outline-none text-center ${
+                                className={`w-[50px] h-[50px] border dark:border-transparent dark:bg-colors-mainBackground rounded-md p-1 outline-none dark:text-white text-colors-dark font-semibold text-[14px] shadow-md${
                                     invalidError
                                         ? "shake border-red-500"
                                         : "dark:border-white border-[#0000004a]"
@@ -79,16 +79,15 @@ const Verification = () => {
                             />
                         ))}
                     </div>
-                    <div>
-                        <p className="text-red-600 font-semibold">
-                            This is an Error
-                        </p>
+                    <div className="flex items-center gap-2 text-red-600 dark:text-red-300 font-semibold">
+                        <BiSolidError className="text-[16px]" />
+                        <p className=" text-[14px]">This is an Error</p>
                     </div>
-                    <Link href={"/verification"} className="place-self-start">
-                        <button className="w-[10rem] border rounded border-colors-dark p-1 outline-none dark:text-white text-colors-dark font-semibold text-[16px] bg-transparent hover:bg-colors-secondary hover:text-white">
-                            Verify
+                    <div className="place-self-start">
+                        <button className="w-[10rem] border dark:border-transparent dark:bg-colors-mainBackground rounded-md p-1 outline-none dark:text-white text-colors-dark font-semibold text-[14px] shadow-md">
+                            Verify OTP
                         </button>
-                    </Link>
+                    </div>
                 </div>
             </div>
             {/* Need help component */}

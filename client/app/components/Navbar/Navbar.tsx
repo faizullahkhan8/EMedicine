@@ -8,6 +8,7 @@ import { ThemeSwitcher } from "@/app/utils/ThemeSwitcher";
 import { HiOutlineMenuAlt3 } from "react-icons/hi";
 import MobileSideBar from "./SubComponents/MobileSideBar";
 import { BsFillCartDashFill } from "react-icons/bs";
+import Image from "next/image";
 
 const Navbar = () => {
     const [mounted, setMounted] = useState(false);
@@ -36,18 +37,26 @@ const Navbar = () => {
     }
 
     return (
-        <div className="w-full relative">
+        <div className="w-full relative z-[2]">
             <div
-                className={`dark:bg-colors-dark bg-colors-accent pb-2 ${
+                className={`dark:bg-[] bg-colors-mainBackground backdrop-blur-md pb-2 ${
                     navBarStaticActive
-                        ? "fixed top-0 left-0 w-full z-[9999] px-[7rem] max-1000px:px-[5rem] max-800px:px-[3rem] bg-opacity-90"
-                        : "px-[7rem] max-1000px:px-[5rem] max-800px:px-[3rem] "
+                        ? "fixed top-0 left-0 w-full z-[9999] px-[7rem] max-1000px:px-[5rem] max-800px:px-[3rem] bg-opacity-60  shadow-lg"
+                        : "px-[7rem] max-1000px:px-[5rem] max-800px:px-[3rem] bg-opacity-60"
                 }`}
             >
                 {/* Logo and Login */}
-                <div className="max-800px:justify-between flex gap-4 py-4  ">
+                <div className="max-800px:justify-between flex gap-4 py-4">
                     <Link href={"/"} className="flex items-center gap-2">
-                        <div className="font-bold">LOGO</div>
+                        <div>
+                            <Image
+                                src="/favicon.ico.png"
+                                alt="logo"
+                                width={100}
+                                height={42}
+                                className="w-[100px] h-[42px] rounded object-cover"
+                            />
+                        </div>
                         <div className="font-bold text-[25px] max-800px:text-[18px] text-colors-primary">
                             EMedicine
                         </div>
@@ -76,7 +85,7 @@ const Navbar = () => {
                                 className="w-10 h-9 rounded-full bg-colors-primary max-800px:hidden"
                             ></Link>
                         ) : (
-                            <div className="max-800px:hidden flex items-center justify-center gap-1 h-10 p-2 border dark:border-colors-primary  border-black rounded-md">
+                            <div className="max-800px:hidden flex items-center justify-center gap-1 h-10 p-2 shadow-md rounded-md border dark:border-transparent dark:bg-colors-mainBackground">
                                 <Link
                                     href="/login"
                                     className="dark:text-white text-colors-dark font-semibold text-[14px]"

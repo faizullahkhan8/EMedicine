@@ -16,9 +16,16 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
+            <head>
+                <link
+                    rel="shortcut icon"
+                    href="/favicon.ico.png"
+                    type="image/x-icon"
+                />
+            </head>
             <body
                 suppressHydrationWarning
-                className={`antialiased !bg-[#868db44c] bg-no-repeat dark:bg-gradient-to-b dark:from-gray-900 dark:to-black duration-300 flex flex-col min-h-screen`}
+                className={`antialiased !bg-[#868db44c] bg-no-repeat dark:bg-gradient-to-b dark:bg-[#121212] duration-300 flex flex-col min-h-screen font-Poppins transition-colors`}
             >
                 <ThemeProvider
                     attribute="class"

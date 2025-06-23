@@ -8,47 +8,54 @@ import {
     BsWhatsapp,
 } from "react-icons/bs";
 import FooterLinks from "./subComponents/FooterLinks";
+import Image from "next/image";
 
 const Footer = () => {
     const date = new Date();
     return (
         <div>
-            <div className="py-4 flex flex-col justify-between px-[7rem] max-1000px:px-[5rem] max-800px:px-[3rem] dark:bg-colors-dark bg-colors-accent max-800px:gap-4">
+            <div className="py-4 flex flex-col justify-between px-[7rem] max-1000px:px-[5rem] max-800px:px-[3rem] dark:bg-colors-mainBackground bg-colors-mainBackground max-800px:gap-4 border dark:border-transparent">
                 <div className="w-full flex items-center justify-between gap-4">
                     <div className="flex items-center justify-center gap-2 ">
-                        <div className="font-bold dark:text-colors-accent">
-                            Logo
+                        <div className="w-max h-full]">
+                            <Image
+                                src="/favicon.ico.png"
+                                alt="logo"
+                                width={100}
+                                height={42}
+                                className="w-[70px] h-[80px] rounded object-cover"
+                            />
                         </div>
                         <div className="font-bold text-[18px] max-800px:text-[14px] dark:text-colors-accent text-colors-primary">
                             Target Pain,<p> Not the Patient.</p>
                         </div>
                     </div>
                     <div className="flex items-center justify-center gap-2">
-                        <div className="flex items-center justify-center gap-2 border dark:border-colors-accent border-colors-dark rounded-md p-1 bg-colors-secondary">
-                            <div>
-                                <BiLogoAndroid className="text-colors-dark text-[24px] max-400px:hidden" />
+                        <div className="flex items-center justify-center gap-2 rounded-md p-1 shadow-lg hover:scale-[1.03] transition-transform duration-300 border dark:border-transparent dark:bg-colors-mainBackground">
+                            <div className="max-400px:hidden">
+                                <BiLogoAndroid className="text-colors-dark text-[24px] max-400px:hidden dark:text-colors-secondary" />
                             </div>
                             <div>
-                                <p className="text-colors-dark text-[12px]">
+                                <p className="text-colors-dark text-[12px] dark:text-white">
                                     Download for the
                                 </p>
-                                <p className="text-colors-dark font-semibold text-[16px]">
+                                <p className="text-colors-secondary font-semibold text-[16px]">
                                     Android
                                 </p>
                             </div>
                         </div>
-                        <div className="flex items-center justify-center gap-2 border dark:border-colors-accent border-colors-dark rounded-md p-1 bg-colors-secondary">
+                        <div className="flex items-center justify-center gap-2 rounded-md p-1 shadow-lg hover:scale-[1.03] transition-transform duration-300 border dark:border-transparent dark:bg-colors-mainBackground">
                             <div>
                                 <BiLogoApple
                                     size={24}
-                                    className="text-colors-dark text-[24px] max-400px:hidden"
+                                    className="text-colors-dark text-[24px] max-400px:hidden dark:text-colors-secondary"
                                 />
                             </div>
                             <div>
-                                <p className="text-colors-dark text-[12px]">
+                                <p className="text-colors-dark text-[12px] dark:text-white">
                                     Download for the
                                 </p>
-                                <p className="text-colors-dark font-semibold text-[16px]">
+                                <p className="text-colors-secondary font-semibold text-[16px]">
                                     Apple
                                 </p>
                             </div>

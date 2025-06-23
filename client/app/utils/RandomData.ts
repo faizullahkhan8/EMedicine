@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import image1 from "@/public/images/Acifyl_pic.webp";
-import Image2 from "@/public/images/Burofen_pic.jpeg";
-import Image3 from "@/public/images/Flygel_pic.webp";
-import image4 from "@/public/images/SurbexZ_pic.jpeg";
-import image5 from "@/public/images/flagyl_tablets_pic.webp";
+import Acifyl from "@/public/images/Acifyl_pic.png";
+import Burofen from "@/public/images/Burofen_pic.png";
+import Flygel from "@/public/images/Flygel_pic.png";
+import SurbexZ from "@/public/images/SurbexZ_pic.png";
+import FlygelTablets from "@/public/images/flagyl_tablets_pic.png";
 
 import { ISliderImageOptions } from "../components/HomePage/ImageSlider";
 
@@ -15,7 +15,7 @@ import labImage from "@/public/images/lab_pic.jpg";
 
 export const MedicineArrayForShowCase: any = [
     {
-        imageUrl: Image3.src,
+        imageUrl: Burofen.src,
         title: "Burufen (120mg)",
         subTitle: "Ibuprofen",
         price: 130.0,
@@ -23,7 +23,7 @@ export const MedicineArrayForShowCase: any = [
         mainItemLocation: "example/url",
     },
     {
-        imageUrl: image4.src,
+        imageUrl: Acifyl.src,
         title: "Acifyle (120mg)",
         subTitle: "Then what to do",
         price: 130.0,
@@ -31,24 +31,24 @@ export const MedicineArrayForShowCase: any = [
         mainItemLocation: "example/url",
     },
     {
-        imageUrl: image5.src,
-        title: "exmple 1 (120mg)",
+        imageUrl: FlygelTablets.src,
+        title: "Flygel Tab (120mg)",
         subTitle: "Then what to do",
         price: 130.0,
         estimatedPrice: 150.0,
         mainItemLocation: "example/url",
     },
     {
-        imageUrl: image1.src,
-        title: "exmple (120mg)",
+        imageUrl: SurbexZ.src,
+        title: "Surbex Z (120mg)",
         subTitle: "Then what to do",
         price: 130.0,
         estimatedPrice: 150.0,
         mainItemLocation: "example/url",
     },
     {
-        imageUrl: Image2.src,
-        title: "exmple (120mg)",
+        imageUrl: Flygel.src,
+        title: "Flygel (120mg)",
         subTitle: "Then what to do",
         price: 130.0,
         estimatedPrice: 150.0,
@@ -64,7 +64,7 @@ export const ImagesForCarosoul = [
 
 export const ImagesForSlider: Array<ISliderImageOptions> = [
     {
-        imageUrl: Image2.src,
+        imageUrl: Burofen.src,
         medicineName: "Burufen (120mg)",
         percentageOff: 15,
         price: 200,
@@ -72,7 +72,7 @@ export const ImagesForSlider: Array<ISliderImageOptions> = [
         mainItemLocation: "example/url",
     },
     {
-        imageUrl: image1.src,
+        imageUrl: Acifyl.src,
         medicineName: "Acifyle (120mg)",
         percentageOff: 10,
         price: 100,
@@ -80,7 +80,7 @@ export const ImagesForSlider: Array<ISliderImageOptions> = [
         mainItemLocation: "example/url",
     },
     {
-        imageUrl: Image3.src,
+        imageUrl: Flygel.src,
         medicineName: "Flygel (120mg)",
         percentageOff: 10,
         price: 100,
@@ -88,7 +88,7 @@ export const ImagesForSlider: Array<ISliderImageOptions> = [
         mainItemLocation: "example/url",
     },
     {
-        imageUrl: image4.src,
+        imageUrl: SurbexZ.src,
         medicineName: "SurbexZ (120mg)",
         percentageOff: 15,
         price: 200,
@@ -96,7 +96,7 @@ export const ImagesForSlider: Array<ISliderImageOptions> = [
         mainItemLocation: "example/url",
     },
     {
-        imageUrl: image5.src,
+        imageUrl: FlygelTablets.src,
         medicineName: "Flygel Tablates",
         percentageOff: 15,
         price: 200,
@@ -117,5 +117,44 @@ export const TwoSectionsData = [
         title: "Lab Tests",
         description:
             "Home-sample & in-lab booking at upto 28% OFF on lab tests form top labs in Pakistan!",
+    },
+];
+
+export const links = [
+    {
+        header: "Wellness & Beauty",
+        listItems: [
+            "Skin Care",
+            "Hair Care",
+            "Personal Hygiene",
+            "Beauty Supplements",
+        ],
+    },
+    {
+        header: "Devices & Injections",
+        listItems: [
+            "Blood Pressure Monitors",
+            "Thermometers",
+            "Insulin Pens",
+            "Syringes",
+        ],
+    },
+    {
+        header: "Laboratories",
+        listItems: [
+            "Malaria Tests",
+            "Blood Sugar Tests",
+            "Cholesterol Tests",
+            "COVID-19 Tests",
+        ],
+    },
+    {
+        header: "Supplements",
+        listItems: [
+            "Vitamins",
+            "Minerals",
+            "Protein Powders",
+            "Herbal Supplements",
+        ],
     },
 ];
