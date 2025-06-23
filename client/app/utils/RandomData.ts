@@ -158,3 +158,30 @@ export const links = [
         ],
     },
 ];
+
+export const howWeWorkData = [
+    {
+        title: "Pharmacy",
+        steps: [
+            "Search and select your medicine",
+            "Enter your details to confirm order",
+            "Sit back and your medicine will be delivered at your doorstep",
+        ],
+    },
+    {
+        title: "Lab Tests",
+        steps: [
+            "Choose your desired lab test",
+            "Book an appointment or request home sample collection",
+            "Receive your test results online",
+        ],
+    },
+    {
+        title: "Doctor Appointment",
+        steps: [
+            "Select a doctor from our network",
+            "Book an appointment online",
+            "Consult with the doctor via video call or in-person",
+        ],
+    },
+];

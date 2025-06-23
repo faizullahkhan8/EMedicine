@@ -50,15 +50,14 @@ const MedicineShowCaseGird: FC<IMedicineShowCaseGirdOptions> = ({
                         </div>
                         {/* TOP ONE ITEM START */}
                         <div className="flex gap-2 flex-col">
-                            <div className="w-full h-full">
-                                <Image
-                                    src={topOneItem.imageUrl}
-                                    width={500}
-                                    height={500}
-                                    alt="sample_medicine"
-                                    className="rounded-lg w-full object-contain"
-                                />
-                            </div>
+                            <Image
+                                src={topOneItem.imageUrl}
+                                width={500}
+                                height={500}
+                                alt="sample_medicine"
+                                className="rounded-lg w-full object-contain"
+                            />
+
                             <div className="p-2">
                                 <h2 className="font-bold text-[22px] dark:text-white">
                                     {topOneItem.title}
@@ -95,17 +94,16 @@ const MedicineShowCaseGird: FC<IMedicineShowCaseGirdOptions> = ({
                                     </button>
                                 </div>
                                 <div>
-                                    <div>
-                                        <Image
-                                            src={item.imageUrl}
-                                            width={500}
-                                            height={500}
-                                            alt="sample_medicine"
-                                            className="rounded w-full object-contain"
-                                        />
-                                    </div>
+                                    <Image
+                                        src={item.imageUrl}
+                                        width={500}
+                                        height={500}
+                                        alt="sample_medicine"
+                                        className="rounded w-full object-contain"
+                                    />
+
                                     <div className="p-2">
-                                        <h4 className="max-800px:text-[14px] mt-2 font-bold">
+                                        <h4 className="max-800px:text-[14px] font-Poppins mt-2 font-bold">
                                             {item.title.toUpperCase()}
                                         </h4>
                                         <div className="flex justify-start gap-3">

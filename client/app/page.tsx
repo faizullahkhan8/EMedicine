@@ -5,6 +5,7 @@ import Carosoul from "./components/HomePage/Carosuol";
 import ImageSlider from "./components/HomePage/ImageSlider";
 import TwoSections from "./components/HomePage/TwoSections";
 import MissionStatement from "./components/HomePage/MissionStatement";
+import HowWeWork from "./components/HomePage/HowWeWork";
 import {
     ImagesForCarosoul,
     ImagesForSlider,
@@ -33,6 +34,7 @@ const Page = () => {
                     Items={MedicineArrayForShowCase}
                     MiniTitle="PHARMACY"
                 />
+                <HowWeWork />
                 <ImageSlider
                     title="Top Selling products"
                     subTitle="Get your necessities at upto 10% discount on all items."
