@@ -9,6 +9,7 @@ import { BsTrash } from "react-icons/bs";
 
 import tempImage from "@/public/images/SurbexZ_pic.png";
 import Image from "next/image";
+import Heading from "@/app/utils/Heading";
 
 interface IOrderdMedicineOptions {
     medicineName: string;
@@ -85,6 +86,11 @@ const Page = () => {
 
     return (
         <div className="w-full flex max-800px:flex-col my-10 px-[7rem] max-1000px:px-[5rem] max-800px:px-[3rem] 800px:gap-12 max-800px:gap-4">
+            <Heading
+                title="EMedicine | Cart"
+                description="EMedicine is online pharmacy provide medicine all over the pakistan with the best price."
+                keyword="Medicine,Pharmacy,Online Pharmacy"
+            />
             {/* left side */}
             <div className="w-full flex flex-col gap-6">
                 <div>

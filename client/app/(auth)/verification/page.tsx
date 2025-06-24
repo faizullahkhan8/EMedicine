@@ -1,4 +1,5 @@
 "use client";
+import Heading from "@/app/utils/Heading";
 import NeedHelp from "@/app/utils/NeedHelp";
 import React, { useRef, useState } from "react";
 import { BiSolidError } from "react-icons/bi";
@@ -41,6 +42,11 @@ const Verification = () => {
 
     return (
         <div>
+            <Heading
+                title="EMedicine | Verification"
+                description="EMedicine is online pharmacy provide medicine all over the pakistan with the best price."
+                keyword="Medicine,Pharmacy,Online Pharmacy"
+            />
             <div className="w-full flex items-center justify-center flex-col my-4 px-[7rem] max-1000px:px-[5rem] max-800px:px-[3rem]">
                 <div className="w-[70%] max-800px:w-full flex flex-col gap-4 border dark:border-transparent shadow-md rounded-md px-8 800px:pr-[8rem] bg-colors-mainBackground py-4">
                     <div>

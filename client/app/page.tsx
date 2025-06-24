@@ -13,13 +13,14 @@ import {
     TwoSectionsData,
 } from "./utils/RandomData";
 import MedicineShowCaseGird from "./components/HomePage/MedicineShowCaseGird";
+import DoctorsWithLocation from "./components/HomePage/DoctorsWithLocation";
 
 const Page = () => {
     return (
         <div>
             <div className="w-full flex justify-center flex-col my-4 px-[7rem] max-1000px:px-[5rem] max-800px:px-[3rem]">
                 <Heading
-                    title="EMedicine"
+                    title="EMedicine | Online Pharmacy in Pakistan"
                     description="EMedicine is online pharmacy provide medicine all over the pakistan with the best price."
                     keyword="Medicine,Pharmacy,Online Pharmacy"
                 />
@@ -40,6 +41,7 @@ const Page = () => {
                     subTitle="Get your necessities at upto 10% discount on all items."
                     Images={ImagesForSlider}
                 />
+                <DoctorsWithLocation />
             </div>
         </div>
     );

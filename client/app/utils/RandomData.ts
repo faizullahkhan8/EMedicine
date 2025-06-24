@@ -185,3 +185,21 @@ export const howWeWorkData = [
         ],
     },
 ];
+
+export const DoctorsWithLocationData = [
+    "Dermatologist",
+    "Gynecologist ",
+    "Cardiologist ",
+    "Dentist ",
+    "Urologist ",
+    "Sexologist ",
+    "Child Specialist ",
+    "Orthopedic Surgeon ",
+    "Eye Specialist ",
+    "ENT Specialist ",
+    "Neurologist ",
+    "Nephrologist ",
+    "Pulmonologist ",
+    "Gastroenterologist ",
+    "Psychiatrist ",
+];

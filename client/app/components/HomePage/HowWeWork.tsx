@@ -24,7 +24,7 @@ const HowWeWork = () => {
                         <button
                             key={index}
                             onClick={() => setDataIndex(index)}
-                            className={`rounded-full px-3 py-1 shadow-md bg-colors-mainBackground border dark:border-transparent ${
+                            className={`rounded-full max-800px:px-2 max-800px:text-[10px] px-3 py-1 shadow-md bg-colors-mainBackground border dark:border-transparent ${
                                 dataIndex === index
                                     ? "bg-colors-primary text-white"
                                     : ""
@@ -35,10 +35,13 @@ const HowWeWork = () => {
                     ))}
                 </div>
                 <div>
-                    <h4 className="text-[16px] max-800px:text-[14px]">
+                    <h4 className="text-[16px] max-800px:text-[14px] my-2">
                         {howWeWorkData[dataIndex].title}
                     </h4>
-                    <ol className="list-disc pl-5 text-[14px] max-800px:text-[12px]">
+                    <ol
+                        className="list-disc flex flex-col gap-2
+                     pl-5 text-[14px] max-800px:text-[12px]"
+                    >
                         {howWeWorkData[dataIndex].steps.map((step, index) => (
                             <li key={index}>{step} </li>
                         ))}
@@ -46,14 +49,14 @@ const HowWeWork = () => {
                 </div>
             </div>
             {/* Right */}
-            <div className="w-[70%] h-[20rem] max-800px:w-full flex items-center justify-center">
+            <div className="w-[70%] h-[20rem] max-800px:w-full max-800px:h-full flex items-center justify-center">
                 {ImagesUrls[dataIndex] && (
                     <Image
                         src={ImagesUrls[dataIndex]}
                         alt="How We Work"
                         width={500}
                         height={500}
-                        className="max-800px:w-full w-[70%] max-800px:h-auto object-fill"
+                        className="max-800px:w-[70%] w-[70%] max-800px:h-auto object-fill"
                     />
                 )}
             </div>

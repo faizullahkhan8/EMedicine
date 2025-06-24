@@ -22,7 +22,7 @@ const MissionStatement = () => {
                 </p>
                 <Link
                     href={""}
-                    className="relative max-800px:text-[14px] text-[16px] group"
+                    className="inline-block w-max relative max-800px:text-[14px] text-[16px] group"
                 >
                     Read More
                     <div className="absolute left-0 -bottom-2 w-8 h-1 bg-colors-primary transition-all duration-300 max-800px:group-hover:w-[4.7rem] group-hover:w-[5.4rem]" />

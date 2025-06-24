@@ -99,7 +99,7 @@ const MedicineShowCaseGird: FC<IMedicineShowCaseGirdOptions> = ({
                                         width={500}
                                         height={500}
                                         alt="sample_medicine"
-                                        className="rounded w-full object-contain"
+                                        className="rounded w-full h-max object-cover"
                                     />
 
                                     <div className="p-2">
