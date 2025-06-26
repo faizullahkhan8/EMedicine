@@ -203,3 +203,51 @@ export const DoctorsWithLocationData = [
     "Gastroenterologist ",
     "Psychiatrist ",
 ];
+
+export const MedicineInformationData = {
+    title: "Metronidazole",
+    description:
+        "This medicine is used to treat bacterial and protozoal infections. It contains Metronidazole, an antibiotic that works by attacking the bacteria, killing them, and preventing the infection from spreading.",
+    ingredients: ["Metronidazole"],
+    drugClass: "Nitroimidazole Class of Antibiotics",
+    dosageForm: "Tablet",
+    uses: [
+        "Skin infections, rosacea, and mouth infections, including infected gums and dental abscesses.",
+        "Conditions such as bacterial vaginosis and pelvic inflammatory disease.",
+        "Infected insect bites, skin ulcers, bed sores, and wounds.",
+        "Bacterial and parasitic infections.",
+    ],
+    dosageInstructions: [
+        "Use the medicine as per your doctor's recommendation.",
+        "The dosage is dependent on the age, condition, and severity.",
+    ],
+    overdose:
+        "Seek medical help immediately if you think you have overdosed on this medication.",
+    missedDose:
+        "If you miss a dose, take it as soon as possible the same day. If you don't remember missing the dose, don't double it. Consult your doctor on how to adjust the missing doses.",
+    howToUse: [
+        "If you are using the cream or gel, wash your hands before using it. Carefully apply the cream/gel on the affected skin area. Don't use too much, apply a thin layer.",
+        "If you are using the intravenous injection, get a medical practitioner to inject it in the vein.",
+        "Try to get the medication dose daily and at the same time to get the most benefit.",
+        "You can take the capsule/tablet form with or without food.",
+    ],
+    whenNotToUse:
+        "This medicine is contraindicated in patients with blood disorders and pregnant and lactating females.",
+    sideEffects: [
+        "Local irritation",
+        "Pruritus (localized or generalized itching)",
+        "Metallic taste",
+        "Nausea",
+        "Numbness of the extremities",
+    ],
+    precautionsAndWarnings: [
+        "Take with caution if there has been a history of drug-related allergy.",
+        "Don't operate heavy machinery or do anything that requires alertness.",
+    ],
+    drugInteractions:
+        "Ask your doctor about any possible drug interactions, and discuss every medicine you have been taking.",
+    storageDisposal:
+        "Store the medicine at room temperature and keep out of direct sunlight, excessive heat, and moisture. Keep the medicine out of the reach of children and animals. Do not use the medication past its expiration date.",
+    controlDrug: "No",
+    quickTips: ["Always follow your doctor's advice and never self-medicate."],
+};

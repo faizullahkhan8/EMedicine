@@ -19,6 +19,7 @@ export default function RootLayout({
             </head>
             <body
                 suppressHydrationWarning
+                suppressContentEditableWarning
                 className={`antialiased !bg-[#868db44c] bg-no-repeat dark:bg-gradient-to-b dark:bg-[#121212] duration-300 flex flex-col min-h-screen font-Poppins transition-colors`}
             >
                 <ThemeProvider

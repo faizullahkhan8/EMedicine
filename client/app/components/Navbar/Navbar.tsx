@@ -64,7 +64,7 @@ const Navbar = () => {
                     <div className="flex items-center justify-center w-full max-800px:justify-end">
                         <SearchInputBox />
                         {/* Cart Icon */}
-                        <Link href="/cart" className="mx-2 relative">
+                        <Link href="orders/cart" className="mx-2 relative">
                             <BsFillCartDashFill className="text-[24px] dark:text-white text-colors-dark hover:cursor-pointer" />
                             <span className="w-4 h-4 flex items-center justify-center absolute top-[-8px] right-[-5px] rounded-full bg-red-600 text-white text-[12px]">
                                 2

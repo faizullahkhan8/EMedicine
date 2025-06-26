@@ -89,9 +89,12 @@ const MedicineShowCaseGird: FC<IMedicineShowCaseGirdOptions> = ({
                                 className="border dark:border-transparent flex w-full rounded-md dark:bg-colors-mainBackground relative group shadow-md"
                             >
                                 <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-[#474c55c7] rounded-md group-hover:opacity-100 opacity-0 transition-opacity duration-300">
-                                    <button className="rounded-md border dark:bg-colors-mainBackground dark:border-transparent shadow-md border-white p-2 text-white font-semibold">
+                                    <Link
+                                        href={`/pharmacy/medicine/${item.title}`}
+                                        className="rounded-md border dark:bg-colors-mainBackground dark:border-transparent shadow-md border-white p-2 text-white font-semibold"
+                                    >
                                         View Product
-                                    </button>
+                                    </Link>
                                 </div>
                                 <div>
                                     <Image
