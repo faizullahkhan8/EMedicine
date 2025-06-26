@@ -1,5 +1,6 @@
 "use client";
 import Button from "@/app/utils/CustomButton";
+import Heading from "@/app/utils/Heading";
 import { MedicineInformationData } from "@/app/utils/RandomData";
 import ShowLocationHerarchy from "@/app/utils/ShowLocationHerarchy";
 import Image from "next/image";
@@ -11,6 +12,11 @@ import { IoMdFlask } from "react-icons/io";
 const page = () => {
     return (
         <div className="my-10 px-[7rem] max-1000px:px-[5rem] max-800px:px-[3rem] scroll-smooth">
+            <Heading
+                title={`Medicine Details | ${MedicineInformationData.title}`}
+                description="View detailed information about the medicine, including its generic name, manufacturer, ratings, and more."
+                keyword="medicine details, medicine information, pharmacy, healthcare, eMedicine"
+            />
             <div>
                 <ShowLocationHerarchy />
             </div>

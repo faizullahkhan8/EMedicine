@@ -1,17 +1,14 @@
 import React, { FC } from "react";
 
-type Props = {
-    type: string;
-    placeholder: string;
+interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
     className?: string;
-};
+}
 
-const CutomInput: FC<Props> = ({ type, placeholder, className }) => {
+const CutomInput: FC<Props> = ({ className, ...props }) => {
     return (
         <>
             <input
-                placeholder={placeholder}
-                type={type}
+                {...props}
                 className={`border dark:border-transparent rounded-md shadow-md p-1 dark:text-white text-colors-dark outline-none bg-colors-mainBackground ${className}`}
             />
         </>

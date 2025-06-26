@@ -1,4 +1,4 @@
-import CutomInput from "@/app/utils/CutomInput";
+import CutomInput from "@/app/utils/CustomInput";
 import Heading from "@/app/utils/Heading";
 import NeedHelp from "@/app/utils/NeedHelp";
 import React from "react";

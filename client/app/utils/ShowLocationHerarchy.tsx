@@ -1,6 +1,10 @@
 import { usePathname } from "next/navigation";
 
-const ShowLocationHerarchy = () => {
+interface ShowLocationHerarchyProps {
+    title?: string;
+}
+
+const ShowLocationHerarchy = ({ title }: ShowLocationHerarchyProps) => {
     const pathName = usePathname()
         .split("/")
         .filter((item) => item !== "");
@@ -10,6 +14,11 @@ const ShowLocationHerarchy = () => {
     );
     return (
         <div>
+            {title && (
+                <h1 className="text-[24px] font-bold text-gray-800 dark:text-white">
+                    {title}
+                </h1>
+            )}
             {pathName.map((item, index) => {
                 return (
                     <span key={index} className="text-gray-500 dark:text-white">
