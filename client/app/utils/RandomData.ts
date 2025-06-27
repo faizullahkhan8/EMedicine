@@ -123,6 +123,7 @@ export const TwoSectionsData = [
 export const links = [
     {
         header: "Wellness & Beauty",
+        imageUrl: "wellness-beauty.png",
         listItems: [
             "Skin Care",
             "Hair Care",
@@ -132,6 +133,7 @@ export const links = [
     },
     {
         header: "Devices & Injections",
+        imageUrl: "devices-injections.png",
         listItems: [
             "Blood Pressure Monitors",
             "Thermometers",
@@ -141,6 +143,7 @@ export const links = [
     },
     {
         header: "Laboratories",
+        imageUrl: "tests-labortries.png",
         listItems: [
             "Malaria Tests",
             "Blood Sugar Tests",
@@ -150,6 +153,7 @@ export const links = [
     },
     {
         header: "Supplements",
+        imageUrl: "supliments.png",
         listItems: [
             "Vitamins",
             "Minerals",

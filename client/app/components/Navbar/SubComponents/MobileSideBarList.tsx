@@ -4,11 +4,12 @@ import { links } from "@/app/utils/RandomData";
 
 const MobileSideBarList = () => {
     return (
-        <div className="flex flex-col gap-2 w-full transition-all duration-500">
+        <div className="flex flex-1 flex-col gap-2 w-full transition-all duration-500">
             {links.map((link, index) => (
                 <ExtendableList
                     key={index}
                     header={link.header}
+                    imageUrl={link.imageUrl}
                     listItems={link.listItems}
                 />
             ))}

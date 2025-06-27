@@ -16,7 +16,7 @@ const Navbar = () => {
         useState<boolean>(false);
     const [isMobileSideBarActive, setIsMobileSideBarActive] =
         useState<boolean>(false);
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
 
     if (typeof window !== "undefined") {
         window.addEventListener("scroll", () => {
@@ -64,7 +64,7 @@ const Navbar = () => {
                     <div className="flex items-center justify-center w-full max-800px:justify-end">
                         <SearchInputBox />
                         {/* Cart Icon */}
-                        <Link href="orders/cart" className="mx-2 relative">
+                        <Link href="/orders/cart" className="mx-2 relative">
                             <BsFillCartDashFill className="text-[24px] dark:text-white text-colors-dark hover:cursor-pointer" />
                             <span className="w-4 h-4 flex items-center justify-center absolute top-[-8px] right-[-5px] rounded-full bg-red-600 text-white text-[12px]">
                                 2
@@ -81,7 +81,7 @@ const Navbar = () => {
                         {/* Auth Buttons */}
                         {isAuthenticated ? (
                             <Link
-                                href={"/profile"}
+                                href={"/user-profile/FaizUllahKhan"}
                                 className="w-10 h-9 rounded-full bg-colors-primary max-800px:hidden"
                             ></Link>
                         ) : (

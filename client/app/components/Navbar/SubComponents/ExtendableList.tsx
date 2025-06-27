@@ -1,22 +1,37 @@
+import Image from "next/image";
 import { useState } from "react";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 
 type ExtendableListOptions = {
     header: string;
+    imageUrl: string;
     listItems: string[];
 };
 
-const ExtendableList = ({ header, listItems }: ExtendableListOptions) => {
+const ExtendableList = ({
+    header,
+    imageUrl,
+    listItems,
+}: ExtendableListOptions) => {
     const [isExtendableListOpen, setIsExtendableListOpen] = useState(false);
 
     return (
-        <div className="relative w-full">
+        <div className="relative w-full border p-2">
             {/* Header (Clickable) */}
             <div
-                className="flex items-center justify-between gap-2 hover:cursor-pointer w-full text-colors-dark"
+                className={`flex items-center justify-between gap-2 hover:cursor-pointer w-full ${
+                    isExtendableListOpen && "border-b"
+                } pb-2 text-colors-dark`}
                 onClick={() => setIsExtendableListOpen((prev) => !prev)}
             >
-                <p className="dark:text-white font-semibold text-[14px]">
+                <Image
+                    src={`/images/${imageUrl}`}
+                    alt="beauti and wellness svg"
+                    width={100}
+                    height={100}
+                    className="w-[50px] dark:invert"
+                />
+                <p className="w-full dark:text-white font-semibold text-[14px]">
                     {header}
                 </p>
                 {isExtendableListOpen ? (
