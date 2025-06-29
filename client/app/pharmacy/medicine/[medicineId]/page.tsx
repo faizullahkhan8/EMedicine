@@ -11,7 +11,7 @@ import { IoMdFlask } from "react-icons/io";
 
 const page = () => {
     return (
-        <div className="my-10 px-[7rem] max-1000px:px-[5rem] max-800px:px-[3rem] scroll-smooth">
+        <div className="default-page-padding scroll-smooth">
             <Heading
                 title={`Medicine Details | ${MedicineInformationData.title}`}
                 description="View detailed information about the medicine, including its generic name, manufacturer, ratings, and more."
@@ -50,12 +50,12 @@ const page = () => {
                     <div className="flex flex-col gap-3">
                         <div className="flex">
                             <div className="flex items-center gap-2">
-                                <BsHouseFill className="dark:text-white " />
-                                <p className="text-[14px]">Manufacturer : </p>
+                                <BsHouseFill className="dark:text-white" />
+                                <p className="text-[14px]">Manufacturer :</p>
                             </div>
                             <div>
                                 <p className="text-[14px]">
-                                    {"  "}
+                                    {" "}
                                     AVENTIS PHARMACEUTICALS (PVT.) LTD.
                                 </p>
                             </div>

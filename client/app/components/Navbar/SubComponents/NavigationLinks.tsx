@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import DropDownList from "./DropDownList";
 import { FiArrowRight } from "react-icons/fi";
 import { links } from "@/app/utils/RandomData";
+import Link from "next/link";
 
 const NavigationLinks = () => {
     const [visibleLinks, setVisibleLinks] = useState(links);
@@ -35,9 +36,12 @@ const NavigationLinks = () => {
                 <DropDownList
                     key={link.header}
                     header={
-                        <span className="dark:text-white text-colors-dark truncate h-full w-full text-ellipsis">
+                        <Link
+                            href={`/pharmacy/medications/${link.targetUrl}`}
+                            className="dark:text-white text-colors-dark truncate h-full w-full text-ellipsis"
+                        >
                             {link.header}
-                        </span>
+                        </Link>
                     }
                     listItems={link.listItems}
                 />

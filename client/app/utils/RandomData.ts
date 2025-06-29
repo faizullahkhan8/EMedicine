@@ -80,6 +80,22 @@ export const ImagesForSlider: Array<ISliderImageOptions> = [
         mainItemLocation: "example/url",
     },
     {
+        imageUrl: Burofen.src,
+        medicineName: "Burufen (120mg)",
+        percentageOff: 15,
+        price: 200,
+        estimatedPrice: 230,
+        mainItemLocation: "example/url",
+    },
+    {
+        imageUrl: Acifyl.src,
+        medicineName: "Acifyle (120mg)",
+        percentageOff: 10,
+        price: 100,
+        estimatedPrice: 120,
+        mainItemLocation: "example/url",
+    },
+    {
         imageUrl: Flygel.src,
         medicineName: "Flygel (120mg)",
         percentageOff: 10,
@@ -124,6 +140,7 @@ export const links = [
     {
         header: "Wellness & Beauty",
         imageUrl: "wellness-beauty.png",
+        targetUrl: "wellness-and-beauty",
         listItems: [
             "Skin Care",
             "Hair Care",
@@ -134,6 +151,7 @@ export const links = [
     {
         header: "Devices & Injections",
         imageUrl: "devices-injections.png",
+        targetUrl: "devices-and-injections",
         listItems: [
             "Blood Pressure Monitors",
             "Thermometers",
@@ -144,6 +162,7 @@ export const links = [
     {
         header: "Laboratories",
         imageUrl: "tests-labortries.png",
+        targetUrl: "laboratories",
         listItems: [
             "Malaria Tests",
             "Blood Sugar Tests",
@@ -154,6 +173,7 @@ export const links = [
     {
         header: "Supplements",
         imageUrl: "supliments.png",
+        targetUrl: "supplements",
         listItems: [
             "Vitamins",
             "Minerals",
