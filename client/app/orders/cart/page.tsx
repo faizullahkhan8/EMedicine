@@ -34,6 +34,14 @@ const Page = () => {
             packPrice: 130,
             packQuantity: 2,
         },
+        {
+            medicineName: "Surbex-Z",
+            medicineDescription:
+                "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem inventore officia, nostrum est maxime.",
+            medicinePictureUrl: "someelse",
+            packPrice: 130,
+            packQuantity: 2,
+        },
     ]);
 
     const handleMedicineQuntityChange = (
@@ -135,7 +143,7 @@ const Page = () => {
                                             <h2 className="font-semibold text-[22px] text-colors-dark dark:text-colors-accent">
                                                 {item.medicineName}
                                             </h2>
-                                            <p className="text-colors-dark dark:text-colors-accent">
+                                            <p className="text-colors-dark dark:text-colors-accent max-800px:hidden">
                                                 {item.medicineDescription}
                                             </p>
                                         </div>

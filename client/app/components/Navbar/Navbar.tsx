@@ -18,17 +18,16 @@ const Navbar = () => {
         useState<boolean>(false);
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
 
-    if (typeof window !== "undefined") {
-        window.addEventListener("scroll", () => {
-            if (window.scrollY > 100) {
-                setNavBarStaticActive(true);
-            } else {
-                setNavBarStaticActive(false);
-            }
-        });
-    }
-
     useEffect(() => {
+        if (typeof window !== "undefined") {
+            window.addEventListener("scroll", () => {
+                if (window.scrollY > 100) {
+                    setNavBarStaticActive(true);
+                } else {
+                    setNavBarStaticActive(false);
+                }
+            });
+        }
         setMounted(true);
     }, []);
 
@@ -48,7 +47,7 @@ const Navbar = () => {
                 {/* Logo and Login */}
                 <div className="max-800px:justify-between flex gap-4 py-4">
                     <Link href={"/"} className="flex items-center gap-2">
-                        <div>
+                        <div className="max-[500px]:hidden">
                             <Image
                                 src="/favicon.ico.png"
                                 alt="logo"

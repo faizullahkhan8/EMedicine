@@ -55,6 +55,7 @@ const page = () => {
                             </div>
                             <div>
                                 <p className="text-[14px]">
+                                    {"  "}
                                     AVENTIS PHARMACEUTICALS (PVT.) LTD.
                                 </p>
                             </div>
@@ -65,7 +66,7 @@ const page = () => {
                                 <p className="text-[14px]">Generic Name : </p>
                             </div>
                             <div>
-                                <p className="text-[14px]">Ibuprofen</p>
+                                <p className="text-[14px]"> Ibuprofen</p>
                             </div>
                         </div>
                     </div>

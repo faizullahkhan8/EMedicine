@@ -17,7 +17,7 @@ const Footer = () => {
             <div className="py-4 flex flex-col justify-between px-[7rem] max-1000px:px-[5rem] max-800px:px-[3rem] dark:bg-colors-mainBackground bg-colors-mainBackground max-800px:gap-4 border dark:border-transparent">
                 <div className="w-full flex items-center justify-between gap-4">
                     <div className="flex items-center justify-center gap-2 ">
-                        <div className="w-max h-full]">
+                        <div className="w-max h-full max-400px:hidden">
                             <Image
                                 src="/favicon.ico.png"
                                 alt="logo"
@@ -32,8 +32,8 @@ const Footer = () => {
                     </div>
                     <div className="flex items-center justify-center gap-2">
                         <div className="flex items-center justify-center gap-2 rounded-md p-1 shadow-lg hover:scale-[1.03] transition-transform duration-300 border dark:border-transparent dark:bg-colors-mainBackground">
-                            <div className="max-400px:hidden">
-                                <BiLogoAndroid className="text-colors-dark text-[24px] max-400px:hidden dark:text-colors-secondary" />
+                            <div className="max-[500px]:hidden">
+                                <BiLogoAndroid className="text-colors-dark text-[24px]dark:text-colors-secondary" />
                             </div>
                             <div>
                                 <p className="text-colors-dark text-[12px] dark:text-white">
@@ -45,10 +45,10 @@ const Footer = () => {
                             </div>
                         </div>
                         <div className="flex items-center justify-center gap-2 rounded-md p-1 shadow-lg hover:scale-[1.03] transition-transform duration-300 border dark:border-transparent dark:bg-colors-mainBackground">
-                            <div>
+                            <div className="max-[500px]:hidden">
                                 <BiLogoApple
                                     size={24}
-                                    className="text-colors-dark text-[24px] max-400px:hidden dark:text-colors-secondary"
+                                    className="text-colors-dark text-[24px] dark:text-colors-secondary"
                                 />
                             </div>
                             <div>
