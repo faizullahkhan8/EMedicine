@@ -18,7 +18,7 @@ import DoctorsWithLocation from "./components/HomePage/DoctorsWithLocation";
 const Page = () => {
     return (
         <div>
-            <div className="w-full flex justify-center flex-col my-4 px-[7rem] max-1000px:px-[5rem] max-800px:px-[3rem]">
+            <div className="w-full flex justify-center flex-col default-page-padding">
                 <Heading
                     title="EMedicine | Online Pharmacy in Pakistan"
                     description="EMedicine is online pharmacy provide medicine all over the pakistan with the best price."

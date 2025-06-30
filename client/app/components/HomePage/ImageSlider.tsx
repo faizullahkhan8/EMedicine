@@ -1,6 +1,8 @@
+import React, { useRef } from "react";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import Button from "@/app/utils/CustomButton";
 
 type Props = {
     title?: string;
@@ -18,15 +20,40 @@ export interface ISliderImageOptions {
 }
 
 const ImageSlider = ({ title, subTitle, Images }: Props) => {
+    const scrollRef = useRef<HTMLDivElement>(null);
+
+    const handleScroll = (dir: "left" | "right") => {
+        const el = scrollRef.current;
+        if (!el) return;
+        const amount = 260; // Adjust to card width + gap
+        el.scrollBy({
+            left: dir === "left" ? -amount : amount,
+            behavior: "smooth",
+        });
+    };
+
     return (
-        <div className="my-8">
+        <div className="my-8 relative w-full">
             <h2 className="text-[24px] font-bold max-800px:text-[18px]">
                 {title}
             </h2>
             <p className="text-[18] max-800px:text-[14px]">
                 {subTitle && subTitle}
             </p>
-            <div className="flex justify-between pb-8 pt-2 px-1 gap-6 w-full h-full overflow-x-auto hide-scrollbar-mobile">
+            {/* Left Arrow */}
+            <Button
+                variant="background"
+                type="button"
+                className="flex items-center justify-center absolute left-0 top-1/2 -translate-y-1/2 z-[1] bg-white/80 dark:bg-slate-800/80 !rounded-full shadow p-1"
+                onClick={() => handleScroll("left")}
+                aria-label="Scroll left"
+            >
+                <FaChevronLeft className="text-2xl max-md:text-xl max-500px:text-base max-400px:text-sm" />
+            </Button>
+            <div
+                ref={scrollRef}
+                className="flex justify-between pb-8 pt-2 px-1 gap-6 w-full h-full overflow-x-auto hide-scrollbar-mobile scroll-smooth"
+            >
                 {Images.map((image, index) => (
                     <div
                         key={index}
@@ -66,6 +93,16 @@ const ImageSlider = ({ title, subTitle, Images }: Props) => {
                     </div>
                 ))}
             </div>
+            {/* Right Arrow */}
+            <Button
+                variant="background"
+                type="button"
+                className="flex items-center justify-center absolute right-0 top-1/2 -translate-y-1/2 z-[1] bg-white/80 dark:bg-slate-800/80 !rounded-full shadow p-1"
+                onClick={() => handleScroll("right")}
+                aria-label="Scroll right"
+            >
+                <FaChevronRight className="text-2xl max-md:text-xl max-500px:text-base max-400px:text-sm" />
+            </Button>
         </div>
     );
 };

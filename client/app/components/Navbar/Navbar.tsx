@@ -38,10 +38,10 @@ const Navbar = () => {
     return (
         <div className="w-full relative z-[2]">
             <div
-                className={`dark:bg-[] bg-colors-mainBackground backdrop-blur-md pb-2 ${
+                className={`dark:bg-[] bg-colors-mainBackground backdrop-blur-3xl pb-2 ${
                     navBarStaticActive
-                        ? "fixed top-0 left-0 w-full z-[9999] px-[7rem] max-1000px:px-[5rem] max-800px:px-[3rem] bg-opacity-60  shadow-lg"
-                        : "px-[7rem] max-1000px:px-[5rem] max-800px:px-[3rem] bg-opacity-60"
+                        ? "fixed top-0 left-0 w-full z-[9999] default-page-padding bg-opacity-60  shadow-lg"
+                        : "default-page-padding bg-opacity-60"
                 }`}
             >
                 {/* Logo and Login */}
@@ -61,7 +61,7 @@ const Navbar = () => {
                         </div>
                     </Link>
                     <div className="flex items-center justify-center w-full max-800px:justify-end">
-                        <SearchInputBox />
+                        <SearchInputBox isMobile={false} />
                         {/* Cart Icon */}
                         <Link href="/orders/cart" className="mx-2 relative">
                             <BsFillCartDashFill className="text-[24px] dark:text-white text-colors-dark hover:cursor-pointer" />
@@ -104,8 +104,8 @@ const Navbar = () => {
                         )}
                     </div>
                 </div>
-                {/* Links */}
-                <div className="flex items-center justify-between gap-4">
+                {/* Links -> only visible on larger then 800px devices */}
+                <div className="flex items-center justify-between gap-4 max-800px:hidden">
                     {/* First Link */}
                     <div className="dark:text-white text-colors-dark font-semibold cursor-pointer text-[16px] max-800px:text-[13px]">
                         Goto Home
@@ -119,6 +119,7 @@ const Navbar = () => {
                         </p>
                     </div>
                 </div>
+                <SearchInputBox isMobile={true} />
             </div>
             {/* Mobile Side bar */}
             {isMobileSideBarActive && (

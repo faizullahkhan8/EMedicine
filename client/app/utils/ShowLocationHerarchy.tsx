@@ -15,7 +15,7 @@ const ShowLocationHerarchy = ({ title }: ShowLocationHerarchyProps) => {
     return (
         <div>
             {title && (
-                <h1 className="text-[24px] font-bold text-gray-800 dark:text-white">
+                <h1 className="text-[24px] max-800px:text-[18px] max-400px:text-[14px] font-bold text-gray-800 dark:text-white">
                     {title}
                 </h1>
             )}

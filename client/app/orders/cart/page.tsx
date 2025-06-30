@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useState } from "react";
-import { MdKeyboardArrowRight } from "react-icons/md";
 import { IoIosCart } from "react-icons/io";
 import Link from "next/link";
 import { AiOutlineMinusSquare, AiOutlinePlusSquare } from "react-icons/ai";
@@ -10,6 +9,7 @@ import { BsTrash } from "react-icons/bs";
 import tempImage from "@/public/images/SurbexZ_pic.png";
 import Image from "next/image";
 import Heading from "@/app/utils/Heading";
+import ShowLocationHerarchy from "@/app/utils/ShowLocationHerarchy";
 
 interface IOrderdMedicineOptions {
     medicineName: string;
@@ -26,6 +26,22 @@ const Page = () => {
     const [orderedMedicines, setOrderedMedicines] = useState<
         Array<IOrderdMedicineOptions>
     >([
+        {
+            medicineName: "Surbex-Z",
+            medicineDescription:
+                "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem inventore officia, nostrum est maxime.",
+            medicinePictureUrl: "someelse",
+            packPrice: 130,
+            packQuantity: 2,
+        },
+        {
+            medicineName: "Surbex-Z",
+            medicineDescription:
+                "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem inventore officia, nostrum est maxime.",
+            medicinePictureUrl: "someelse",
+            packPrice: 130,
+            packQuantity: 2,
+        },
         {
             medicineName: "Surbex-Z",
             medicineDescription:
@@ -93,7 +109,7 @@ const Page = () => {
     };
 
     return (
-        <div className="w-full flex max-800px:flex-col my-10 px-[7rem] max-1000px:px-[5rem] max-800px:px-[3rem] 800px:gap-12 max-800px:gap-4">
+        <div className="default-page-padding w-full flex max-800px:flex-col 800px:gap-12 max-800px:gap-4">
             <Heading
                 title="EMedicine | Cart"
                 description="EMedicine is online pharmacy provide medicine all over the pakistan with the best price."
@@ -101,16 +117,7 @@ const Page = () => {
             />
             {/* left side */}
             <div className="w-full flex flex-col gap-6">
-                <div>
-                    <h2 className="text-[22px] font-bold">Cart</h2>
-                    <div className="flex items-center gap-2">
-                        <p>Home</p>
-                        <MdKeyboardArrowRight />
-                        <p>Pharmacy</p>
-                        <MdKeyboardArrowRight />
-                        <p>Cart</p>
-                    </div>
-                </div>
+                <ShowLocationHerarchy title="Cart" />
                 <div>
                     <p className="text-[#248564] font-semibold">
                         Deliver Around 48 - 72 hours
@@ -121,126 +128,133 @@ const Page = () => {
 
                 {orderedMedicines.length > 0 ? (
                     <div className="w-full bg-colors-mainBackground border rounded-md shadow-md px-4 py-2">
-                        <h1 className="text-[22px] font-semibold text-black dark:text-white">
+                        <h1 className="text-[22px] max-800px:text-[18px] max-400px:text-[16px] font-semibold text-black dark:text-white">
                             Medicines & Other Products :{" "}
                             {orderedMedicines.length} items
                         </h1>
                         <div className="w-full h-[1px] bg-gray-500 my-2" />
-                        {orderedMedicines.map((item, index) => (
-                            <div key={index}>
-                                {/* upper section */}
-                                <div className="flex w-full max-800px:flex-col-reverse rounded-md shadow-md p-2 border">
-                                    {/* pic + name + description */}
-                                    <div className="w-full flex flex-[3] gap-2 max-1000px:flex-col">
-                                        <div className="w-full h-[10rem] bg-green-600 rounded-md">
-                                            <Image
-                                                src={tempImage}
-                                                alt="order_medicine_pic"
-                                                className="w-full h-full object-cover rounded-md"
-                                            />
+                        <div className="grid grid-cols-1 max-800px:grid-cols-2 gap-2">
+                            {orderedMedicines.map((item, index) => (
+                                <div
+                                    key={index}
+                                    className="rounded-md shadow-md p-2 border"
+                                >
+                                    {/* upper section */}
+                                    <div className="flex w-full max-800px:flex-col-reverse">
+                                        {/* pic + name + description */}
+                                        <div className="w-full flex flex-[3] gap-2 max-1000px:flex-col">
+                                            <div className="w-full h-[12rem] rounded-md">
+                                                <Image
+                                                    src={tempImage}
+                                                    width={600}
+                                                    height={600}
+                                                    alt="order_medicine_pic"
+                                                    className="w-full h-full object-contain rounded-md"
+                                                />
+                                            </div>
+                                            <div className="w-full">
+                                                <h2 className="font-semibold text-[22px] max-800px:text-[18px] max-400px:text-[16px] text-colors-dark dark:text-colors-accent">
+                                                    {item.medicineName}
+                                                </h2>
+                                                <p className="text-colors-dark dark:text-colors-accent max-800px:hidden">
+                                                    {item.medicineDescription}
+                                                </p>
+                                            </div>
                                         </div>
-                                        <div className="w-full">
-                                            <h2 className="font-semibold text-[22px] text-colors-dark dark:text-colors-accent">
-                                                {item.medicineName}
-                                            </h2>
-                                            <p className="text-colors-dark dark:text-colors-accent max-800px:hidden">
-                                                {item.medicineDescription}
+                                        <div className="flex flex-[1] flex-col max-800px:justify-between max-800px:flex-row-reverse gap-2 w-full p-2">
+                                            <div
+                                                onClick={() => {
+                                                    handleRemoveMedicine(index);
+                                                }}
+                                                className="w-full flex cursor-pointer items-center justify-center py-1 rounded-md border transition-shadow  hover:shadow-red-600 shadow-md text-red-600 text-center font-medium"
+                                            >
+                                                <BsTrash className="text-[18px]" />
+                                            </div>
+                                            <p className="max-800px:hidden w-full py-[2px] rounded-md border text-black text-center font-medium shadow-md">
+                                                Quantity
+                                            </p>
+                                            <div className="flex items-center justify-around w-full ">
+                                                <AiOutlineMinusSquare
+                                                    className="text-[22px] hover:text-red-600 transition-colors duration-300 cursor-pointer"
+                                                    onClick={(e: any) => {
+                                                        handleMedicineQuntityChange(
+                                                            false,
+                                                            index,
+                                                            e
+                                                        );
+                                                    }}
+                                                />
+                                                <input
+                                                    type="number"
+                                                    value={item.packQuantity}
+                                                    className="w-5 border rounded-md bg-colors-mainBackground text-center dark:text-white text-black shadow-md"
+                                                    onChange={(e) => {
+                                                        if (
+                                                            orderedMedicines[
+                                                                index
+                                                            ].packQuantity <
+                                                                2 &&
+                                                            Number.parseInt(
+                                                                e.target.value
+                                                            ) < 2
+                                                        ) {
+                                                            return null;
+                                                        }
+
+                                                        const updatedData = [
+                                                            ...orderedMedicines,
+                                                        ];
+                                                        updatedData[
+                                                            index
+                                                        ].packQuantity =
+                                                            Number.parseInt(
+                                                                e.target.value
+                                                            );
+                                                        setOrderedMedicines(
+                                                            updatedData
+                                                        );
+                                                    }}
+                                                />
+                                                <AiOutlinePlusSquare
+                                                    className="text-[22px] hover:text-green-600 cursor-pointer transition-colors duration-300"
+                                                    onClick={(e: any) => {
+                                                        handleMedicineQuntityChange(
+                                                            true,
+                                                            index,
+                                                            e
+                                                        );
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {/* lower section */}
+                                    <div className="w-full flex items-center justify-between max-800px:flex-wrap py-2">
+                                        {/* pack price */}
+                                        <div>
+                                            <p className="text-[16px] max-800px:text-[14px] max-400px:text-[12px] font-semibold">
+                                                Pack Price : {item.packPrice}
+                                            </p>
+                                        </div>
+                                        {/* pack quantiy */}
+                                        <div>
+                                            <p className="text-[16px] max-800px:text-[14px] max-400px:text-[12px] font-semibold">
+                                                Pack Quantity :{" "}
+                                                {item.packQuantity}
+                                            </p>
+                                        </div>
+                                        {/* total price of that pack*/}
+                                        <div>
+                                            <p className="text-[16px] max-800px:text-[14px] max-400px:text-[12px] font-semibold">
+                                                Total :{" "}
+                                                {item.packPrice *
+                                                    item.packQuantity}{" "}
                                             </p>
                                         </div>
                                     </div>
-                                    <div className="flex flex-[1] flex-col max-800px:justify-between max-800px:flex-row-reverse gap-2 w-full p-2">
-                                        <div
-                                            onClick={() => {
-                                                handleRemoveMedicine(index);
-                                            }}
-                                            className="w-full flex cursor-pointer items-center justify-center py-1 rounded-md border transition-shadow  hover:shadow-red-600 shadow-md text-red-600 text-center font-medium"
-                                        >
-                                            <BsTrash className="text-[18px]" />
-                                        </div>
-                                        <p className="max-800px:hidden w-full py-[2px] rounded-md border text-black text-center font-medium shadow-md">
-                                            Quantity
-                                        </p>
-                                        <div className="flex items-center justify-around w-full ">
-                                            <AiOutlineMinusSquare
-                                                className="text-[22px] hover:text-red-600 transition-colors duration-300 cursor-pointer"
-                                                onClick={(e: any) => {
-                                                    handleMedicineQuntityChange(
-                                                        false,
-                                                        index,
-                                                        e
-                                                    );
-                                                }}
-                                            />
-                                            <input
-                                                type="number"
-                                                value={item.packQuantity}
-                                                className="w-5 border rounded-md bg-colors-mainBackground text-center dark:text-white text-black shadow-md"
-                                                onChange={(e) => {
-                                                    if (
-                                                        orderedMedicines[index]
-                                                            .packQuantity < 2 &&
-                                                        Number.parseInt(
-                                                            e.target.value
-                                                        ) < 2
-                                                    ) {
-                                                        return null;
-                                                    }
-
-                                                    const updatedData = [
-                                                        ...orderedMedicines,
-                                                    ];
-                                                    updatedData[
-                                                        index
-                                                    ].packQuantity =
-                                                        Number.parseInt(
-                                                            e.target.value
-                                                        );
-                                                    setOrderedMedicines(
-                                                        updatedData
-                                                    );
-                                                }}
-                                            />
-                                            <AiOutlinePlusSquare
-                                                className="text-[22px] hover:text-green-600 cursor-pointer transition-colors duration-300"
-                                                onClick={(e: any) => {
-                                                    handleMedicineQuntityChange(
-                                                        true,
-                                                        index,
-                                                        e
-                                                    );
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
                                 </div>
-                                {/* lower section */}
-                                <div className="w-full flex items-center justify-between max-800px:flex-wrap py-2">
-                                    {/* pack price */}
-                                    <div>
-                                        <p className="text-[16px] font-semibold">
-                                            Pack Price : {item.packPrice}
-                                        </p>
-                                    </div>
-                                    {/* pack quantiy */}
-                                    <div>
-                                        <p className="text-[16px] font-semibold">
-                                            Pack Quantity : {item.packQuantity}
-                                        </p>
-                                    </div>
-                                    {/* total price of that pack*/}
-                                    <div>
-                                        <p className="text-[16px] font-semibold">
-                                            Total :{" "}
-                                            {item.packPrice * item.packQuantity}{" "}
-                                        </p>
-                                    </div>
-                                </div>
-
-                                {orderedMedicines.length !== index + 1 && (
-                                    <div className="w-full h-[1px] bg-gray-600 my-2" />
-                                )}
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
                 ) : (
                     // if there is no medicines ordered

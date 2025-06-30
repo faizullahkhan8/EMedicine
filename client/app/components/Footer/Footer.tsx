@@ -14,7 +14,7 @@ const Footer = () => {
     const date = new Date();
     return (
         <div>
-            <div className="py-4 flex flex-col justify-between px-[7rem] max-1000px:px-[5rem] max-800px:px-[3rem] dark:bg-colors-mainBackground bg-colors-mainBackground max-800px:gap-4 border dark:border-transparent">
+            <div className="py-4 flex flex-col justify-between default-page-padding dark:bg-colors-mainBackground bg-colors-mainBackground max-800px:gap-4 border dark:border-transparent">
                 <div className="w-full flex items-center justify-between gap-4">
                     <div className="flex items-center justify-center gap-2 ">
                         <div className="w-max h-full max-400px:hidden">
